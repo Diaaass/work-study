@@ -1,0 +1,33 @@
+{
+  "users": {
+    "title": "Пайдаланушыларды басқару",
+    "searchPlaceholder": "Аты немесе email бойынша іздеу...",
+    "filterAll": "Барлық рөлдер",
+    "filterStudents": "Студенттер",
+    "filterHR": "HR-менеджерлер",
+    "filterAdmins": "Админдер",
+    "name": "Аты",
+    "email": "Email",
+    "role": "Рөлі",
+    "registered": "Тіркелген күні",
+    "status": "Статус",
+    "actions": "Әрекеттер",
+    "active": "Белсенді",
+    "blocked": "Бұғатталған",
+    "block": "Бұғаттау",
+    "unblock": "Бұғаттан шығару",
+    "viewDetails": "Толығырақ",
+    "totalUsers": "Барлық пайдаланушылар: {{count}}"
+  },
+  "moderation": {
+    "title": "Модерация",
+    "empty": "Модерациядағы элементтер жоқ",
+    "approve": "Мақұлдау",
+    "reject": "Қабылдамау",
+    "rejectReason": "Қабылдамау себебі",
+    "rejectPlaceholder": "Қабылданбау себебін көрсетіңіз...",
+    "postedBy": "Автор: {{name}}",
+    "company": "Компания: {{company}}",
+    "pendingCount": "Қаралуда: {{count}}"
+  }
+}

@@ -1,0 +1,18 @@
+.layout {
+  display: flex;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.main {
+  flex: 1;
+  padding: var(--spacing-xl);
+  max-width: var(--max-content-width);
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .main {
+    padding: var(--spacing-md);
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "users": {
+    "title": "Управление пользователями",
+    "searchPlaceholder": "Поиск по имени или email...",
+    "filterAll": "Все роли",
+    "filterStudents": "Студенты",
+    "filterHR": "HR-менеджеры",
+    "filterAdmins": "Админы",
+    "name": "Имя",
+    "email": "Email",
+    "role": "Роль",
+    "registered": "Дата регистрации",
+    "status": "Статус",
+    "actions": "Действия",
+    "active": "Активен",
+    "blocked": "Заблокирован",
+    "block": "Заблокировать",
+    "unblock": "Разблокировать",
+    "viewDetails": "Подробнее",
+    "totalUsers": "Всего пользователей: {{count}}"
+  },
+  "moderation": {
+    "title": "Модерация",
+    "empty": "Нет элементов на модерации",
+    "approve": "Одобрить",
+    "reject": "Отклонить",
+    "rejectReason": "Причина отклонения",
+    "rejectPlaceholder": "Укажите причину отклонения...",
+    "postedBy": "Автор: {{name}}",
+    "company": "Компания: {{company}}",
+    "pendingCount": "На рассмотрении: {{count}}"
+  }
+}

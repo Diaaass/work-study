@@ -1,0 +1,67 @@
+{
+  "dashboard": {
+    "welcome": "Welcome, {{name}}!",
+    "recommendations": "AI Recommendations",
+    "recommendationsDesc": "Internships matched to your profile",
+    "recentApplications": "Recent Applications",
+    "stats": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "totalApplied": "Total Applied"
+    },
+    "matchScore": "{{score}}% match"
+  },
+  "search": {
+    "title": "Find Internships",
+    "placeholder": "Search by title, company, or skill...",
+    "filters": "Filters",
+    "location": "Location",
+    "type": "Type",
+    "results": "{{count}} internships found",
+    "noResults": "No internships match your search",
+    "clearFilters": "Clear filters"
+  },
+  "detail": {
+    "description": "Description",
+    "requirements": "Requirements",
+    "skills": "Skills",
+    "salary": "Salary",
+    "duration": "Duration",
+    "deadline": "Application deadline",
+    "applicants": "{{count}} applicants",
+    "applyNow": "Apply Now",
+    "alreadyApplied": "Already Applied",
+    "deadlinePassed": "Deadline Passed",
+    "postedBy": "Posted by {{company}}"
+  },
+  "apply": {
+    "title": "Apply for {{title}}",
+    "coverLetter": "Cover Letter",
+    "coverLetterPlaceholder": "Tell us why you're interested and what makes you a great candidate...",
+    "resume": "Resume",
+    "resumePlaceholder": "Upload your resume (PDF)",
+    "submit": "Submit Application",
+    "confirmTitle": "Confirm Submission",
+    "confirmMessage": "Are you sure you want to submit? You cannot edit after submitting.",
+    "charCount": "{{current}}/{{max}} characters"
+  },
+  "applications": {
+    "title": "My Applications",
+    "empty": "You haven't applied to any internships yet",
+    "appliedOn": "Applied on {{date}}",
+    "feedback": "Feedback",
+    "filterAll": "All",
+    "filterPending": "Pending",
+    "filterAccepted": "Accepted",
+    "filterRejected": "Rejected"
+  },
+  "profile": {
+    "title": "My Profile",
+    "personalInfo": "Personal Information",
+    "academicInfo": "Academic Information",
+    "skills": "Skills",
+    "addSkill": "Add skill and press Enter",
+    "bio": "About me",
+    "saveChanges": "Save Changes"
+  }
+}

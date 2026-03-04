@@ -1,0 +1,67 @@
+{
+  "dashboard": {
+    "welcome": "Добро пожаловать, {{name}}!",
+    "recommendations": "AI-рекомендации",
+    "recommendationsDesc": "Стажировки, подобранные для вас",
+    "recentApplications": "Последние заявки",
+    "stats": {
+      "pending": "На рассмотрении",
+      "accepted": "Принято",
+      "totalApplied": "Всего заявок"
+    },
+    "matchScore": "{{score}}% совпадение"
+  },
+  "search": {
+    "title": "Поиск стажировок",
+    "placeholder": "Поиск по названию, компании или навыку...",
+    "filters": "Фильтры",
+    "location": "Город",
+    "type": "Формат",
+    "results": "Найдено стажировок: {{count}}",
+    "noResults": "По вашему запросу ничего не найдено",
+    "clearFilters": "Сбросить фильтры"
+  },
+  "detail": {
+    "description": "Описание",
+    "requirements": "Требования",
+    "skills": "Навыки",
+    "salary": "Зарплата",
+    "duration": "Длительность",
+    "deadline": "Дедлайн подачи",
+    "applicants": "{{count}} заявок",
+    "applyNow": "Откликнуться",
+    "alreadyApplied": "Вы уже откликнулись",
+    "deadlinePassed": "Дедлайн прошёл",
+    "postedBy": "Опубликовано {{company}}"
+  },
+  "apply": {
+    "title": "Отклик на {{title}}",
+    "coverLetter": "Сопроводительное письмо",
+    "coverLetterPlaceholder": "Расскажите, почему вас заинтересовала эта стажировка...",
+    "resume": "Резюме",
+    "resumePlaceholder": "Загрузите ваше резюме (PDF)",
+    "submit": "Отправить заявку",
+    "confirmTitle": "Подтверждение",
+    "confirmMessage": "Вы уверены? После отправки редактирование невозможно.",
+    "charCount": "{{current}}/{{max}} символов"
+  },
+  "applications": {
+    "title": "Мои заявки",
+    "empty": "Вы ещё не подавали заявки",
+    "appliedOn": "Подано {{date}}",
+    "feedback": "Обратная связь",
+    "filterAll": "Все",
+    "filterPending": "На рассмотрении",
+    "filterAccepted": "Принятые",
+    "filterRejected": "Отклонённые"
+  },
+  "profile": {
+    "title": "Мой профиль",
+    "personalInfo": "Личная информация",
+    "academicInfo": "Образование",
+    "skills": "Навыки",
+    "addSkill": "Добавьте навык и нажмите Enter",
+    "bio": "О себе",
+    "saveChanges": "Сохранить изменения"
+  }
+}

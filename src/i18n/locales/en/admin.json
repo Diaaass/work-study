@@ -1,0 +1,33 @@
+{
+  "users": {
+    "title": "Users Management",
+    "searchPlaceholder": "Search by name or email...",
+    "filterAll": "All Roles",
+    "filterStudents": "Students",
+    "filterHR": "HR Managers",
+    "filterAdmins": "Admins",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "registered": "Registered",
+    "status": "Status",
+    "actions": "Actions",
+    "active": "Active",
+    "blocked": "Blocked",
+    "block": "Block",
+    "unblock": "Unblock",
+    "viewDetails": "View Details",
+    "totalUsers": "{{count}} users"
+  },
+  "moderation": {
+    "title": "Moderation Queue",
+    "empty": "No items pending moderation",
+    "approve": "Approve",
+    "reject": "Reject",
+    "rejectReason": "Reason for rejection",
+    "rejectPlaceholder": "Explain why this internship is being rejected...",
+    "postedBy": "Posted by {{name}}",
+    "company": "Company: {{company}}",
+    "pendingCount": "{{count}} pending review"
+  }
+}

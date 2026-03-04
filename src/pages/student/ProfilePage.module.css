@@ -1,0 +1,131 @@
+.page {
+  padding: var(--spacing-lg);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.pageTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Section Card */
+.sectionCard {
+  margin-bottom: var(--spacing-lg);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Field Grid */
+.fieldGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+}
+
+.bioField {
+  margin-top: var(--spacing-md);
+}
+
+/* Skills */
+.skillsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.skillsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.skillPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  border-radius: var(--border-radius-full);
+  transition: background var(--transition-fast);
+}
+
+.skillPill:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.skillPill:hover .skillRemove {
+  color: #fff;
+}
+
+.skillRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  width: 16px;
+  height: 16px;
+  transition: color var(--transition-fast);
+}
+
+.skillRemove:hover {
+  color: var(--color-error);
+}
+
+.skillInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.skillInput:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.skillInput::placeholder {
+  color: var(--color-text-secondary);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--spacing-md);
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .pageTitle {
+    font-size: var(--font-size-2xl);
+  }
+
+  .fieldGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

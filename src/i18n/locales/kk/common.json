@@ -1,0 +1,76 @@
+{
+  "appName": "Work&Study",
+  "nav": {
+    "dashboard": "Басты бет",
+    "search": "Іздеу",
+    "myApplications": "Менің өтініштерім",
+    "profile": "Профиль",
+    "postInternship": "Тағылымдама құру",
+    "myInternships": "Менің тағылымдамаларым",
+    "users": "Пайдаланушылар",
+    "moderation": "Модерация",
+    "logout": "Шығу",
+    "login": "Кіру",
+    "register": "Тіркелу"
+  },
+  "common": {
+    "save": "Сақтау",
+    "cancel": "Болдырмау",
+    "delete": "Жою",
+    "edit": "Өзгерту",
+    "close": "Жабу",
+    "submit": "Жіберу",
+    "apply": "Өтініш беру",
+    "search": "Іздеу",
+    "filter": "Сүзгі",
+    "loading": "Жүктелуде...",
+    "noResults": "Нәтиже табылмады",
+    "error": "Қате орын алды",
+    "success": "Сәтті",
+    "confirm": "Растау",
+    "back": "Артқа",
+    "next": "Келесі",
+    "viewAll": "Барлығын көру",
+    "viewDetails": "Толығырақ",
+    "all": "Барлығы"
+  },
+  "status": {
+    "pending": "Қаралуда",
+    "reviewed": "Қаралды",
+    "accepted": "Қабылданды",
+    "rejected": "Қабылданбады",
+    "draft": "Жоба",
+    "published": "Жарияланды",
+    "closed": "Жабылды"
+  },
+  "location": {
+    "almaty": "Алматы",
+    "astana": "Астана",
+    "remote": "Қашықтан",
+    "all": "Барлық қалалар"
+  },
+  "type": {
+    "remote": "Қашықтан",
+    "onsite": "Кеңседе",
+    "hybrid": "Гибрид"
+  },
+  "errors": {
+    "unauthorized": "Жалғастыру үшін кіріңіз",
+    "forbidden": "Қол жетімсіз",
+    "notFound": "Бет табылмады",
+    "serverError": "Бірдеңе дұрыс болмады. Қайталап көріңіз.",
+    "networkError": "Желі қатесі. Байланысты тексеріңіз."
+  },
+  "toast": {
+    "saved": "Өзгерістер сақталды",
+    "created": "Сәтті құрылды",
+    "deleted": "Сәтті жойылды",
+    "applied": "Өтініш сәтті жіберілді",
+    "accessDenied": "Бұл бетке қол жетімсіз"
+  },
+  "language": {
+    "en": "English",
+    "ru": "Русский",
+    "kk": "Қазақша"
+  }
+}

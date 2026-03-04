@@ -1,0 +1,76 @@
+{
+  "appName": "Work&Study",
+  "nav": {
+    "dashboard": "Dashboard",
+    "search": "Search",
+    "myApplications": "My Applications",
+    "profile": "Profile",
+    "postInternship": "Post Internship",
+    "myInternships": "My Internships",
+    "users": "Users",
+    "moderation": "Moderation",
+    "logout": "Log out",
+    "login": "Log in",
+    "register": "Sign up"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "submit": "Submit",
+    "apply": "Apply",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "error": "An error occurred",
+    "success": "Success",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "viewAll": "View all",
+    "viewDetails": "View details",
+    "all": "All"
+  },
+  "status": {
+    "pending": "Pending",
+    "reviewed": "Reviewed",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "draft": "Draft",
+    "published": "Published",
+    "closed": "Closed"
+  },
+  "location": {
+    "almaty": "Almaty",
+    "astana": "Astana",
+    "remote": "Remote",
+    "all": "All cities"
+  },
+  "type": {
+    "remote": "Remote",
+    "onsite": "On-site",
+    "hybrid": "Hybrid"
+  },
+  "errors": {
+    "unauthorized": "Please log in to continue",
+    "forbidden": "Access denied",
+    "notFound": "Page not found",
+    "serverError": "Something went wrong. Please try again.",
+    "networkError": "Network error. Check your connection."
+  },
+  "toast": {
+    "saved": "Changes saved successfully",
+    "created": "Created successfully",
+    "deleted": "Deleted successfully",
+    "applied": "Application submitted successfully",
+    "accessDenied": "You don't have permission to access this page"
+  },
+  "language": {
+    "en": "English",
+    "ru": "Русский",
+    "kk": "Қазақша"
+  }
+}

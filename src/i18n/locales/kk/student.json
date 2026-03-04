@@ -1,0 +1,67 @@
+{
+  "dashboard": {
+    "welcome": "Қош келдіңіз, {{name}}!",
+    "recommendations": "AI-ұсыныстар",
+    "recommendationsDesc": "Сізге сәйкес тағылымдамалар",
+    "recentApplications": "Соңғы өтініштер",
+    "stats": {
+      "pending": "Қаралуда",
+      "accepted": "Қабылданды",
+      "totalApplied": "Барлық өтініштер"
+    },
+    "matchScore": "{{score}}% сәйкестік"
+  },
+  "search": {
+    "title": "Тағылымдама іздеу",
+    "placeholder": "Атауы, компания немесе дағды бойынша іздеу...",
+    "filters": "Сүзгілер",
+    "location": "Қала",
+    "type": "Формат",
+    "results": "{{count}} тағылымдама табылды",
+    "noResults": "Сұрауыңыз бойынша ештеңе табылмады",
+    "clearFilters": "Сүзгілерді тазалау"
+  },
+  "detail": {
+    "description": "Сипаттама",
+    "requirements": "Талаптар",
+    "skills": "Дағдылар",
+    "salary": "Жалақы",
+    "duration": "Ұзақтығы",
+    "deadline": "Өтініш мерзімі",
+    "applicants": "{{count}} өтініш",
+    "applyNow": "Өтініш беру",
+    "alreadyApplied": "Сіз өтініш бердіңіз",
+    "deadlinePassed": "Мерзім өтті",
+    "postedBy": "{{company}} жариялады"
+  },
+  "apply": {
+    "title": "{{title}} өтініш беру",
+    "coverLetter": "Мотивациялық хат",
+    "coverLetterPlaceholder": "Неліктен бұл тағылымдамаға қызығушылық танытасыз...",
+    "resume": "Резюме",
+    "resumePlaceholder": "Резюмеңізді жүктеңіз (PDF)",
+    "submit": "Өтінішті жіберу",
+    "confirmTitle": "Растау",
+    "confirmMessage": "Сенімдісіз бе? Жібергеннен кейін өзгерту мүмкін емес.",
+    "charCount": "{{current}}/{{max}} таңба"
+  },
+  "applications": {
+    "title": "Менің өтініштерім",
+    "empty": "Сіз әлі өтініш берген жоқсыз",
+    "appliedOn": "{{date}} берілді",
+    "feedback": "Кері байланыс",
+    "filterAll": "Барлығы",
+    "filterPending": "Қаралуда",
+    "filterAccepted": "Қабылданды",
+    "filterRejected": "Қабылданбады"
+  },
+  "profile": {
+    "title": "Менің профилім",
+    "personalInfo": "Жеке ақпарат",
+    "academicInfo": "Білім",
+    "skills": "Дағдылар",
+    "addSkill": "Дағды қосыңыз және Enter басыңыз",
+    "bio": "Өзім туралы",
+    "saveChanges": "Өзгерістерді сақтау"
+  }
+}
