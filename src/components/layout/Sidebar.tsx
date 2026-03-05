@@ -2,6 +2,17 @@ import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { UserRole } from '@/types/enums';
+import {
+  Home,
+  Search,
+  ClipboardList,
+  User,
+  PlusCircle,
+  FileText,
+  Users,
+  ShieldCheck,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import styles from './Sidebar.module.css';
 
 interface SidebarProps {
@@ -12,28 +23,30 @@ interface SidebarProps {
 interface NavItem {
   to: string;
   label: string;
-  icon: string;
+  icon: LucideIcon;
 }
+
+const ICON_SIZE = 20;
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
 
   const studentNav: NavItem[] = [
-    { to: '/dashboard', label: t('nav.dashboard'), icon: '🏠' },
-    { to: '/search', label: t('nav.search'), icon: '🔍' },
-    { to: '/my-applications', label: t('nav.myApplications'), icon: '📋' },
-    { to: '/profile', label: t('nav.profile'), icon: '👤' },
+    { to: '/dashboard', label: t('nav.dashboard'), icon: Home },
+    { to: '/search', label: t('nav.search'), icon: Search },
+    { to: '/my-applications', label: t('nav.myApplications'), icon: ClipboardList },
+    { to: '/profile', label: t('nav.profile'), icon: User },
   ];
 
   const hrNav: NavItem[] = [
-    { to: '/hr/post', label: t('nav.postInternship'), icon: '➕' },
-    { to: '/hr/internships', label: t('nav.myInternships'), icon: '📄' },
+    { to: '/hr/post', label: t('nav.postInternship'), icon: PlusCircle },
+    { to: '/hr/internships', label: t('nav.myInternships'), icon: FileText },
   ];
 
   const adminNav: NavItem[] = [
-    { to: '/admin/users', label: t('nav.users'), icon: '👥' },
-    { to: '/admin/moderation', label: t('nav.moderation'), icon: '🛡️' },
+    { to: '/admin/users', label: t('nav.users'), icon: Users },
+    { to: '/admin/moderation', label: t('nav.moderation'), icon: ShieldCheck },
   ];
 
   const getNavItems = (): NavItem[] => {
@@ -58,19 +71,24 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         onClick={onClose}
       />
       <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            className={({ isActive }) =>
-              `${styles.navItem} ${isActive ? styles.navItemActive : ''}`
-            }
-            onClick={onClose}
-          >
-            <span className={styles.navIcon}>{item.icon}</span>
-            {item.label}
-          </NavLink>
-        ))}
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                `${styles.navItem} ${isActive ? styles.navItemActive : ''}`
+              }
+              onClick={onClose}
+            >
+              <span className={styles.navIcon}>
+                <Icon size={ICON_SIZE} strokeWidth={2} />
+              </span>
+              {item.label}
+            </NavLink>
+          );
+        })}
       </aside>
     </>
   );

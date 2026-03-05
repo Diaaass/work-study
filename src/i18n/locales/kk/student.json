@@ -4,12 +4,19 @@
     "recommendations": "AI-ұсыныстар",
     "recommendationsDesc": "Сізге сәйкес тағылымдамалар",
     "recentApplications": "Соңғы өтініштер",
+    "recentApps": "Соңғы өтініштер",
     "stats": {
       "pending": "Қаралуда",
       "accepted": "Қабылданды",
       "totalApplied": "Барлық өтініштер"
     },
-    "matchScore": "{{score}}% сәйкестік"
+    "pending": "Қаралуда",
+    "accepted": "Қабылданды",
+    "totalApps": "Барлық өтініштер",
+    "match": "сәйкестік",
+    "matchScore": "{{score}}% сәйкестік",
+    "noRecommendations": "Әзірге ұсыныстар жоқ",
+    "internship": "Тағылымдама"
   },
   "search": {
     "title": "Тағылымдама іздеу",
@@ -19,7 +26,16 @@
     "type": "Формат",
     "results": "{{count}} тағылымдама табылды",
     "noResults": "Сұрауыңыз бойынша ештеңе табылмады",
-    "clearFilters": "Сүзгілерді тазалау"
+    "clearFilters": "Сүзгілерді тазалау",
+    "allLocations": "Барлық қалалар",
+    "almaty": "Алматы",
+    "astana": "Астана",
+    "remote": "Қашықтан",
+    "allTypes": "Барлық форматтар",
+    "typeRemote": "Қашықтан",
+    "typeOnsite": "Кеңседе",
+    "typeHybrid": "Аралас",
+    "tryDifferent": "Іздеу параметрлерін өзгертіп көріңіз"
   },
   "detail": {
     "description": "Сипаттама",
@@ -32,7 +48,12 @@
     "applyNow": "Өтініш беру",
     "alreadyApplied": "Сіз өтініш бердіңіз",
     "deadlinePassed": "Мерзім өтті",
-    "postedBy": "{{company}} жариялады"
+    "postedBy": "{{company}} жариялады",
+    "back": "Артқа",
+    "backToSearch": "Іздеуге оралу",
+    "error": "Қате",
+    "notFound": "Тағылымдама табылмады",
+    "negotiable": "Келісім бойынша"
   },
   "apply": {
     "title": "{{title}} өтініш беру",
@@ -43,17 +64,33 @@
     "submit": "Өтінішті жіберу",
     "confirmTitle": "Растау",
     "confirmMessage": "Сенімдісіз бе? Жібергеннен кейін өзгерту мүмкін емес.",
-    "charCount": "{{current}}/{{max}} таңба"
+    "charCount": "{{current}}/{{max}} таңба",
+    "loadError": "Тағылымдаманы жүктеу қатесі",
+    "coverLetterRequired": "Мотивациялық хат міндетті",
+    "coverLetterTooLong": "Мотивациялық хат тым ұзын",
+    "resumeRequired": "Резюме міндетті",
+    "success": "Өтініш сәтті жіберілді!",
+    "alreadyApplied": "Сіз бұл тағылымдамаға бұрын өтініш бергенсіз",
+    "error": "Өтінішті жіберу қатесі",
+    "cancel": "Болдырмау",
+    "confirm": "Растау"
   },
   "applications": {
     "title": "Менің өтініштерім",
     "empty": "Сіз әлі өтініш берген жоқсыз",
-    "appliedOn": "{{date}} берілді",
+    "appliedOn": "Берілді",
     "feedback": "Кері байланыс",
     "filterAll": "Барлығы",
     "filterPending": "Қаралуда",
     "filterAccepted": "Қабылданды",
-    "filterRejected": "Қабылданбады"
+    "filterRejected": "Қабылданбады",
+    "all": "Барлығы",
+    "pending": "Қаралуда",
+    "accepted": "Қабылданды",
+    "rejected": "Қабылданбады",
+    "internship": "Тағылымдама",
+    "noApplications": "Өтініш әлі жоқ",
+    "startSearching": "Тағылымдама іздеуді бастаңыз"
   },
   "profile": {
     "title": "Менің профилім",
@@ -62,6 +99,23 @@
     "skills": "Дағдылар",
     "addSkill": "Дағды қосыңыз және Enter басыңыз",
     "bio": "Өзім туралы",
-    "saveChanges": "Өзгерістерді сақтау"
+    "saveChanges": "Өзгерістерді сақтау",
+    "name": "Аты",
+    "email": "Email",
+    "phone": "Телефон",
+    "telegram": "Telegram",
+    "bioPlaceholder": "Өзіңіз туралы айтыңыз...",
+    "university": "Университет",
+    "major": "Мамандық",
+    "graduationYear": "Бітіру жылы",
+    "save": "Сақтау",
+    "saved": "Профиль сақталды",
+    "saveError": "Профильді сақтау қатесі"
+  },
+  "status": {
+    "pending": "Қаралуда",
+    "accepted": "Қабылданды",
+    "rejected": "Қабылданбады",
+    "reviewed": "Қаралды"
   }
 }

@@ -4,12 +4,19 @@
     "recommendations": "AI Recommendations",
     "recommendationsDesc": "Internships matched to your profile",
     "recentApplications": "Recent Applications",
+    "recentApps": "Recent Applications",
     "stats": {
       "pending": "Pending",
       "accepted": "Accepted",
       "totalApplied": "Total Applied"
     },
-    "matchScore": "{{score}}% match"
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "totalApps": "Total Applied",
+    "match": "match",
+    "matchScore": "{{score}}% match",
+    "noRecommendations": "No recommendations available yet",
+    "internship": "Internship"
   },
   "search": {
     "title": "Find Internships",
@@ -19,7 +26,16 @@
     "type": "Type",
     "results": "{{count}} internships found",
     "noResults": "No internships match your search",
-    "clearFilters": "Clear filters"
+    "clearFilters": "Clear filters",
+    "allLocations": "All locations",
+    "almaty": "Almaty",
+    "astana": "Astana",
+    "remote": "Remote",
+    "allTypes": "All types",
+    "typeRemote": "Remote",
+    "typeOnsite": "Onsite",
+    "typeHybrid": "Hybrid",
+    "tryDifferent": "Try adjusting your search criteria"
   },
   "detail": {
     "description": "Description",
@@ -32,7 +48,12 @@
     "applyNow": "Apply Now",
     "alreadyApplied": "Already Applied",
     "deadlinePassed": "Deadline Passed",
-    "postedBy": "Posted by {{company}}"
+    "postedBy": "Posted by {{company}}",
+    "back": "Back",
+    "backToSearch": "Back to search",
+    "error": "Error",
+    "notFound": "Internship not found",
+    "negotiable": "Negotiable"
   },
   "apply": {
     "title": "Apply for {{title}}",
@@ -43,17 +64,33 @@
     "submit": "Submit Application",
     "confirmTitle": "Confirm Submission",
     "confirmMessage": "Are you sure you want to submit? You cannot edit after submitting.",
-    "charCount": "{{current}}/{{max}} characters"
+    "charCount": "{{current}}/{{max}} characters",
+    "loadError": "Failed to load internship",
+    "coverLetterRequired": "Cover letter is required",
+    "coverLetterTooLong": "Cover letter is too long",
+    "resumeRequired": "Resume is required",
+    "success": "Application submitted successfully!",
+    "alreadyApplied": "You have already applied to this internship",
+    "error": "Failed to submit application",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "applications": {
     "title": "My Applications",
     "empty": "You haven't applied to any internships yet",
-    "appliedOn": "Applied on {{date}}",
+    "appliedOn": "Applied on",
     "feedback": "Feedback",
     "filterAll": "All",
     "filterPending": "Pending",
     "filterAccepted": "Accepted",
-    "filterRejected": "Rejected"
+    "filterRejected": "Rejected",
+    "all": "All",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "internship": "Internship",
+    "noApplications": "No applications yet",
+    "startSearching": "Start searching for internships"
   },
   "profile": {
     "title": "My Profile",
@@ -62,6 +99,23 @@
     "skills": "Skills",
     "addSkill": "Add skill and press Enter",
     "bio": "About me",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "telegram": "Telegram",
+    "bioPlaceholder": "Tell about yourself...",
+    "university": "University",
+    "major": "Major",
+    "graduationYear": "Graduation Year",
+    "save": "Save",
+    "saved": "Profile saved",
+    "saveError": "Failed to save profile"
+  },
+  "status": {
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "reviewed": "Reviewed"
   }
 }

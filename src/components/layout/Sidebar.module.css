@@ -39,9 +39,11 @@
 }
 
 .navIcon {
-  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 24px;
-  text-align: center;
+  flex-shrink: 0;
 }
 
 .divider {

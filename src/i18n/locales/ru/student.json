@@ -4,12 +4,19 @@
     "recommendations": "AI-рекомендации",
     "recommendationsDesc": "Стажировки, подобранные для вас",
     "recentApplications": "Последние заявки",
+    "recentApps": "Последние заявки",
     "stats": {
       "pending": "На рассмотрении",
       "accepted": "Принято",
       "totalApplied": "Всего заявок"
     },
-    "matchScore": "{{score}}% совпадение"
+    "pending": "На рассмотрении",
+    "accepted": "Принято",
+    "totalApps": "Всего заявок",
+    "match": "совпадение",
+    "matchScore": "{{score}}% совпадение",
+    "noRecommendations": "Пока нет рекомендаций для вас",
+    "internship": "Стажировка"
   },
   "search": {
     "title": "Поиск стажировок",
@@ -19,7 +26,16 @@
     "type": "Формат",
     "results": "Найдено стажировок: {{count}}",
     "noResults": "По вашему запросу ничего не найдено",
-    "clearFilters": "Сбросить фильтры"
+    "clearFilters": "Сбросить фильтры",
+    "allLocations": "Все города",
+    "almaty": "Алматы",
+    "astana": "Астана",
+    "remote": "Удалённо",
+    "allTypes": "Все форматы",
+    "typeRemote": "Удалённо",
+    "typeOnsite": "В офисе",
+    "typeHybrid": "Гибрид",
+    "tryDifferent": "Попробуйте изменить параметры поиска"
   },
   "detail": {
     "description": "Описание",
@@ -32,7 +48,12 @@
     "applyNow": "Откликнуться",
     "alreadyApplied": "Вы уже откликнулись",
     "deadlinePassed": "Дедлайн прошёл",
-    "postedBy": "Опубликовано {{company}}"
+    "postedBy": "Опубликовано {{company}}",
+    "back": "Назад",
+    "backToSearch": "К поиску",
+    "error": "Ошибка",
+    "notFound": "Стажировка не найдена",
+    "negotiable": "По договорённости"
   },
   "apply": {
     "title": "Отклик на {{title}}",
@@ -43,17 +64,33 @@
     "submit": "Отправить заявку",
     "confirmTitle": "Подтверждение",
     "confirmMessage": "Вы уверены? После отправки редактирование невозможно.",
-    "charCount": "{{current}}/{{max}} символов"
+    "charCount": "{{current}}/{{max}} символов",
+    "loadError": "Ошибка загрузки стажировки",
+    "coverLetterRequired": "Сопроводительное письмо обязательно",
+    "coverLetterTooLong": "Сопроводительное письмо слишком длинное",
+    "resumeRequired": "Резюме обязательно",
+    "success": "Заявка успешно отправлена!",
+    "alreadyApplied": "Вы уже подавали заявку на эту стажировку",
+    "error": "Ошибка при отправке заявки",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить"
   },
   "applications": {
     "title": "Мои заявки",
     "empty": "Вы ещё не подавали заявки",
-    "appliedOn": "Подано {{date}}",
+    "appliedOn": "Подано",
     "feedback": "Обратная связь",
     "filterAll": "Все",
     "filterPending": "На рассмотрении",
     "filterAccepted": "Принятые",
-    "filterRejected": "Отклонённые"
+    "filterRejected": "Отклонённые",
+    "all": "Все",
+    "pending": "На рассмотрении",
+    "accepted": "Принятые",
+    "rejected": "Отклонённые",
+    "internship": "Стажировка",
+    "noApplications": "Заявок пока нет",
+    "startSearching": "Начните поиск стажировок"
   },
   "profile": {
     "title": "Мой профиль",
@@ -62,6 +99,23 @@
     "skills": "Навыки",
     "addSkill": "Добавьте навык и нажмите Enter",
     "bio": "О себе",
-    "saveChanges": "Сохранить изменения"
+    "saveChanges": "Сохранить изменения",
+    "name": "Имя",
+    "email": "Email",
+    "phone": "Телефон",
+    "telegram": "Telegram",
+    "bioPlaceholder": "Расскажите о себе...",
+    "university": "Университет",
+    "major": "Специальность",
+    "graduationYear": "Год выпуска",
+    "save": "Сохранить",
+    "saved": "Профиль сохранён",
+    "saveError": "Ошибка сохранения профиля"
+  },
+  "status": {
+    "pending": "На рассмотрении",
+    "accepted": "Принято",
+    "rejected": "Отклонено",
+    "reviewed": "Рассмотрено"
   }
 }
