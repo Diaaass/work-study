@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const authRoutes = require('./modules/auth/auth.routes');
+const internshipRoutes = require('./modules/internships/internship.routes');
 
 const app = express();
 
@@ -13,5 +14,6 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/internships', internshipRoutes);
 
 module.exports = app;

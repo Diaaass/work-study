@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const User = require('../modules/users/user.model');
 
-const authMiddleware = (req, res, next) => {
+module.exports = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -11,11 +12,12 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(401).json({ message: 'Пользователь не найден' });
+    req.userId = user._id.toString();
+    req.userRole = user.role;
     next();
   } catch (error) {
     res.status(401).json({ message: 'Токен недействителен' });
   }
 };
-
-module.exports = authMiddleware;
