@@ -4,106 +4,148 @@ AI-driven internship matching platform for university students in Kazakhstan.
 
 ## Tech Stack
 
-- **Frontend**: React 19 + TypeScript 5.9 + Vite 7
-- **Styling**: CSS Modules with design tokens
-- **Routing**: react-router-dom v7 (protected + role-based routes)
-- **i18n**: react-i18next (Russian, English, Kazakh)
-- **API**: Mock data layer (ready to swap for real backend)
+- **Frontend**: React 19 + TypeScript + Vite 7 + nginx
+- **Backend**: Node.js + Express 5 + Prisma ORM
+- **Database**: PostgreSQL 16
+- **Auth**: JWT
+- **Email**: Resend
+- **Infrastructure**: Docker + Docker Compose
 
-## Getting Started
+---
+
+## Быстрый старт для разработки
+
+Требования: [Docker Desktop](https://www.docker.com/products/docker-desktop/) + Node.js 20+
 
 ```bash
-# Install dependencies
+# 1. Клонируй репозиторий
+git clone <repo-url>
+cd work-study
+
+# 2. Создай .env в папке backend
+cp backend/.env.example backend/.env
+
+# 3. Запусти базу данных через Docker (только БД, быстро)
+docker-compose up -d
+
+# 4. Запусти бэкенд
+cd backend && npm install && npx prisma migrate deploy && npm run dev
+
+# 5. В другом терминале — запусти фронтенд
+cd frontend && npm install && npm run dev
+```
+
+После запуска:
+- **Фронтенд**: http://localhost:5173
+- **Бэкенд API**: http://localhost:8000
+- **Health check**: http://localhost:8000/health
+
+Остановить БД: `docker-compose down`
+Остановить + удалить данные БД: `docker-compose down -v`
+
+---
+
+## Деплой на сервер (продакшн)
+
+```bash
+# Поднимает всё: БД + бэкенд + фронтенд
+docker-compose -f docker-compose.prod.yml up --build -d
+```
+
+---
+
+## Локальная разработка (без Docker)
+
+### Backend
+
+```bash
+cd backend
 npm install
-
-# Start dev server
-npm run dev
-
-# Production build
-npm run build
-
-# Preview production build
-npm run preview
+cp .env.example .env   # заполни DATABASE_URL своей локальной БД
+npx prisma migrate dev
+npm run dev            # http://localhost:8000
 ```
 
-The app will be available at `http://localhost:5173`
+### Frontend
 
-## Test Accounts
-
-| Email              | Password      | Role        |
-|--------------------|---------------|-------------|
-| student@test.com   | password123   | Student     |
-| hr@test.com        | password123   | HR Manager  |
-| admin@test.com     | password123   | Admin       |
-
-## Project Structure
-
-```
-src/
-  api/                 # API client + typed modules (auth, internships, applications, users)
-  assets/              # Static assets
-  components/
-    layout/            # AppLayout, Header, Sidebar
-    ui/                # Reusable UI kit (Button, Input, Card, Badge, Modal, Skeleton, Toast)
-  context/             # AuthContext, ToastContext
-  hooks/               # useAuth, useToast
-  i18n/                # i18next config + locales (en, ru, kk)
-  mock/                # Mock data + API handlers
-  pages/
-    auth/              # Login, Register
-    student/           # Dashboard, Search, InternshipDetail, ApplicationForm, MyApplications, Profile
-    hr/                # PostInternship, MyInternships, Applicants
-    admin/             # Users, Moderation
-  router/              # Route definitions, ProtectedRoute, RoleRoute
-  styles/              # Design tokens (variables.css), global styles
-  types/               # TypeScript types and enums
-  utils/               # Validation, date formatting helpers
+```bash
+cd frontend
+npm install
+npm run dev            # http://localhost:5173
 ```
 
-## Features
+---
 
-### Student
-- AI-powered internship recommendations (ranked by match score)
-- Search with filters (city, work type, skills)
-- Internship detail pages with full info
-- Application form with cover letter
-- Application tracking with status badges
-- Profile management with skills
+## API Endpoints
 
-### HR Manager
-- Post internships with requirements and skills
-- Manage listings (publish, close)
-- Review applicants (accept/reject with feedback)
+### Auth
+| Метод | Путь | Доступ | Описание |
+|-------|------|--------|----------|
+| POST | `/api/v1/auth/register` | Public | Регистрация |
+| POST | `/api/v1/auth/login` | Public | Логин |
+| GET | `/api/v1/auth/me` | Auth | Текущий пользователь |
 
-### Admin
-- Users management table (search, filter, block/unblock)
-- Internship moderation queue (approve/reject)
+### Internships
+| Метод | Путь | Доступ | Описание |
+|-------|------|--------|----------|
+| GET | `/api/v1/internships` | Public | Список стажировок |
+| GET | `/api/v1/internships/:id` | Public | Стажировка по ID |
+| POST | `/api/v1/internships` | HR, Admin | Создать стажировку |
+| PATCH | `/api/v1/internships/:id` | HR, Admin | Обновить стажировку |
+| PATCH | `/api/v1/internships/:id/moderate` | Admin | Модерация |
 
-## Design System
+### Applications
+| Метод | Путь | Доступ | Описание |
+|-------|------|--------|----------|
+| POST | `/api/v1/applications` | Student | Подать заявку |
+| GET | `/api/v1/applications/my` | Student | Мои заявки |
+| GET | `/api/v1/applications/internship/:id` | HR, Admin | Заявки на стажировку |
+| PATCH | `/api/v1/applications/:id` | HR, Admin | Обновить статус заявки |
 
-Inspired by hh.ru (HeadHunter) — clean, professional job board aesthetic.
+### Users
+| Метод | Путь | Доступ | Описание |
+|-------|------|--------|----------|
+| GET | `/api/v1/users` | Admin | Все пользователи |
+| PATCH | `/api/v1/users/:id/block` | Admin | Блокировка/разблокировка |
+| PATCH | `/api/v1/users/profile` | Student | Обновить профиль |
 
-- **Primary**: #2557A7 | **Hover**: #1A4285
-- **Background**: #FFFFFF | **Surface**: #F5F7FA
-- **Text**: #0D1B2A | **Secondary text**: #6B7A99
-- **Success**: #17A05E | **Error**: #D9360B
-- **Font**: Inter, 14-16px
-- **Cards**: 8px radius, subtle shadow
-- **Mobile-first** responsive design
+---
 
-## API Integration
+## Роли
 
-The frontend uses a mock API layer in `src/mock/handlers.ts`. To connect a real backend:
+| Роль | Описание |
+|------|----------|
+| `student` | Ищет стажировки, подаёт заявки, управляет профилем |
+| `hr` | Публикует стажировки, рассматривает заявки |
+| `admin` | Модерация стажировок, управление пользователями |
 
-1. Update `src/api/client.ts` to make real `fetch()` calls instead of importing mock handlers
-2. Set the `API_BASE_URL` environment variable
-3. All API modules (`src/api/*.ts`) remain unchanged — they use typed interfaces
+---
 
-## i18n
+## Структура проекта
 
-Three languages supported:
-- **Russian** (default fallback)
-- **English**
-- **Kazakh**
-
-Translation files are in `src/i18n/locales/{lang}/`. Namespaces: `common`, `auth`, `student`, `hr`, `admin`.
+```
+work-study/
+├── backend/
+│   ├── prisma/
+│   │   └── schema.prisma      # Схема БД
+│   ├── src/
+│   │   ├── config/            # Prisma client
+│   │   ├── middleware/        # Auth, Role
+│   │   └── modules/
+│   │       ├── auth/
+│   │       ├── users/
+│   │       ├── internships/
+│   │       ├── applications/
+│   │       └── matching/      # AI-matching (в разработке)
+│   ├── .env.example
+│   └── Dockerfile
+├── frontend/
+│   ├── src/
+│   │   ├── api/               # API клиент (готов к подключению бэка)
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── mock/              # Mock-данные (временно)
+│   ├── nginx.conf
+│   └── Dockerfile
+└── docker-compose.yml
+```

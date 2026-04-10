@@ -1,31 +1,76 @@
-const User = require('./user.model');
+const prisma = require('../../config/db');
 
 const getAll = async ({ search, role }) => {
-  const filter = {};
-  if (role) filter.role = role;
+  const where = {};
+  if (role) where.role = role;
   if (search) {
-    filter.$or = [
-      { name: { $regex: search, $options: 'i' } },
-      { email: { $regex: search, $options: 'i' } }
+    where.OR = [
+      { name: { contains: search, mode: 'insensitive' } },
+      { email: { contains: search, mode: 'insensitive' } }
     ];
   }
-  return User.find(filter).select('-password');
+
+  return prisma.user.findMany({
+    where,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      isBlocked: true,
+      university: true,
+      major: true,
+      gpa: true,
+      skills: true,
+      telegramId: true,
+      createdAt: true,
+      updatedAt: true
+    }
+  });
 };
 
 const toggleBlock = async (id) => {
-  const user = await User.findById(id);
+  const user = await prisma.user.findUnique({ where: { id: parseInt(id) } });
   if (!user) throw new Error('Пользователь не найден');
-  user.isBlocked = !user.isBlocked;
-  await user.save();
-  return user;
+
+  return prisma.user.update({
+    where: { id: parseInt(id) },
+    data: { isBlocked: !user.isBlocked },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      isBlocked: true
+    }
+  });
 };
 
 const updateProfile = async (id, data) => {
-  return User.findByIdAndUpdate(
-    id,
-    { profile: data },
-    { returnDocument: 'after' }
-  ).select('-password');
+  return prisma.user.update({
+    where: { id: parseInt(id) },
+    data: {
+      university: data.university,
+      major: data.major,
+      gpa: data.gpa,
+      skills: data.skills || [],
+      telegramId: data.telegramId
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      isBlocked: true,
+      university: true,
+      major: true,
+      gpa: true,
+      skills: true,
+      telegramId: true,
+      createdAt: true,
+      updatedAt: true
+    }
+  });
 };
 
 module.exports = { getAll, toggleBlock, updateProfile };

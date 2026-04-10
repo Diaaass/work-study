@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  student
+  hr
+  admin
+}
+
+enum WorkType {
+  remote
+  office
+  hybrid
+}
+
+enum InternshipStatus {
+  pending
+  published
+  closed
+  rejected
+}
+
+enum ApplicationStatus {
+  pending
+  accepted
+  rejected
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role     @default(student)
+  isBlocked  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Профиль (только для студентов)
+  university String?
+  major      String?
+  gpa        Float?
+  skills     String[]
+  telegramId String?
+
+  internships  Internship[]
+  applications Application[]
+}
+
+model Internship {
+  id           Int              @id @default(autoincrement())
+  title        String
+  company      String
+  description  String
+  requirements String[]
+  skills       String[]
+  city         String
+  workType     WorkType         @default(office)
+  salary       Float            @default(0)
+  status       InternshipStatus @default(pending)
+  postedById   Int
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  postedBy     User          @relation(fields: [postedById], references: [id])
+  applications Application[]
+}
+
+model Application {
+  id           Int               @id @default(autoincrement())
+  studentId    Int
+  internshipId Int
+  coverLetter  String
+  status       ApplicationStatus @default(pending)
+  feedback     String            @default("")
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  student    User       @relation(fields: [studentId], references: [id])
+  internship Internship @relation(fields: [internshipId], references: [id])
+
+  @@unique([studentId, internshipId])
+}

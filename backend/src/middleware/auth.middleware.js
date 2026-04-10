@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../modules/users/user.model');
+const prisma = require('../config/db');
 
 module.exports = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -12,9 +12,9 @@ module.exports = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
+    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
     if (!user) return res.status(401).json({ message: 'Пользователь не найден' });
-    req.userId = user._id.toString();
+    req.userId = user.id;
     req.userRole = user.role;
     next();
   } catch (error) {
