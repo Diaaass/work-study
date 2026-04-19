@@ -17,14 +17,42 @@ export const authApi = {
     university?: string;
     major?: string;
     company?: string;
-  }): Promise<AuthResponse> {
-    return apiClient<AuthResponse>('/auth/register', {
+  }): Promise<{ email: string; autoVerified?: boolean }> {
+    return apiClient<{ email: string; autoVerified?: boolean }>('/auth/register', {
       method: 'POST',
       body: data,
     });
   },
 
+  verifyEmail(email: string, code: string): Promise<AuthResponse> {
+    return apiClient<AuthResponse>('/auth/verify-email', {
+      method: 'POST',
+      body: { email, code },
+    });
+  },
+
+  resendCode(email: string): Promise<{ message: string }> {
+    return apiClient<{ message: string }>('/auth/resend-code', {
+      method: 'POST',
+      body: { email },
+    });
+  },
+
   getMe(): Promise<User> {
     return apiClient<User>('/auth/me');
+  },
+
+  forgotPassword(email: string): Promise<{ message: string }> {
+    return apiClient<{ message: string }>('/auth/forgot-password', {
+      method: 'POST',
+      body: { email },
+    });
+  },
+
+  resetPassword(email: string, code: string, newPassword: string): Promise<{ message: string }> {
+    return apiClient<{ message: string }>('/auth/reset-password', {
+      method: 'POST',
+      body: { email, code, newPassword },
+    });
   },
 };

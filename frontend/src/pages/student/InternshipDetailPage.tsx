@@ -31,7 +31,7 @@ export default function InternshipDetailPage() {
           applicationsApi.getMy(),
         ]);
         setInternship(internshipData);
-        const applied = myApps.find((a) => a.internshipId === id);
+        const applied = myApps.find((a) => String(a.internshipId) === id);
         if (applied) {
           setExistingApp(applied);
         }
@@ -93,8 +93,8 @@ export default function InternshipDetailPage() {
             <h1 className={styles.title}>{internship.title}</h1>
             <p className={styles.company}>{internship.company}</p>
             <div className={styles.meta}>
-              <Badge variant="info">{internship.location}</Badge>
-              <Badge variant="neutral">{internship.type}</Badge>
+              <Badge variant="info">{internship.city}</Badge>
+              <Badge variant="neutral">{internship.workType}</Badge>
               <span className={styles.posted}>
                 {timeAgo(internship.createdAt)}
               </span>

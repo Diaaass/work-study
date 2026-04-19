@@ -158,7 +158,7 @@ export default function ApplicantsPage() {
 
       <div className={styles.header}>
         <h1 className={styles.title}>
-          {t('applicants.title', { internship: internship?.title || '' })}
+          {t('applicants.title', { title: internship?.title || '' })}
         </h1>
         <p className={styles.subtitle}>
           {t('applicants.totalCount', { count: applicants.length })}
@@ -215,7 +215,7 @@ export default function ApplicantsPage() {
                     </div>
                     <div className={styles.cardMetaRight}>
                       <span className={styles.appliedDate}>
-                        {formatDateShort(application.appliedAt)}
+                        {formatDateShort(application.createdAt)}
                       </span>
                       <Badge variant={getStatusVariant(application.status)}>
                         {t(`applicants.status.${application.status}`)}

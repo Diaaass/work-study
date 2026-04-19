@@ -11,6 +11,8 @@ import {
   FileText,
   Users,
   ShieldCheck,
+  HelpCircle,
+  MessageSquare,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import styles from './Sidebar.module.css';
@@ -37,16 +39,22 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { to: '/search', label: t('nav.search'), icon: Search },
     { to: '/my-applications', label: t('nav.myApplications'), icon: ClipboardList },
     { to: '/profile', label: t('nav.profile'), icon: User },
+    { to: '/faq', label: t('nav.faq'), icon: HelpCircle },
+    { to: '/support', label: t('nav.support'), icon: MessageSquare },
   ];
 
   const hrNav: NavItem[] = [
     { to: '/hr/post', label: t('nav.postInternship'), icon: PlusCircle },
     { to: '/hr/internships', label: t('nav.myInternships'), icon: FileText },
+    { to: '/profile', label: t('nav.profile'), icon: User },
+    { to: '/faq', label: t('nav.faq'), icon: HelpCircle },
+    { to: '/support', label: t('nav.support'), icon: MessageSquare },
   ];
 
   const adminNav: NavItem[] = [
     { to: '/admin/users', label: t('nav.users'), icon: Users },
     { to: '/admin/moderation', label: t('nav.moderation'), icon: ShieldCheck },
+    { to: '/admin/support', label: t('nav.supportTickets'), icon: MessageSquare },
   ];
 
   const getNavItems = (): NavItem[] => {

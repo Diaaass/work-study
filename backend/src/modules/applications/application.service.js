@@ -1,6 +1,7 @@
 const prisma = require('../../config/db');
+const { sendMessage } = require('../../services/telegram.service');
 
-const apply = async ({ internshipId, coverLetter }, userId) => {
+const apply = async ({ internshipId, coverLetter, resumeUrl }, userId) => {
   const internship = await prisma.internship.findUnique({
     where: { id: parseInt(internshipId) }
   });
@@ -26,7 +27,8 @@ const apply = async ({ internshipId, coverLetter }, userId) => {
     data: {
       studentId: parseInt(userId),
       internshipId: parseInt(internshipId),
-      coverLetter
+      coverLetter,
+      resumeUrl: resumeUrl || null,
     }
   });
 };
@@ -72,15 +74,31 @@ const getInternshipApplications = async (internshipId, userId) => {
 const updateStatus = async (id, { status, feedback }, userId) => {
   const application = await prisma.application.findUnique({
     where: { id: parseInt(id) },
-    include: { internship: true }
+    include: {
+      internship: true,
+      student: { select: { telegramId: true, name: true } },
+    },
   });
   if (!application) throw new Error('Заявка не найдена');
   if (application.internship.postedById !== parseInt(userId)) throw new Error('Нет доступа');
 
-  return prisma.application.update({
+  const updated = await prisma.application.update({
     where: { id: parseInt(id) },
-    data: { status, feedback }
+    data: { status, feedback },
   });
+
+  // Уведомление студенту в Telegram при изменении статуса
+  if ((status === 'accepted' || status === 'rejected') && application.student?.telegramId) {
+    const emoji = status === 'accepted' ? '✅' : '❌';
+    const label = status === 'accepted' ? 'принята' : 'отклонена';
+    const feedbackLine = feedback?.trim() ? `\n\n💬 <b>Комментарий:</b> ${feedback.trim()}` : '';
+    await sendMessage(
+      application.student.telegramId,
+      `${emoji} <b>Заявка ${label}!</b>\n\nСтажировка: <b>${application.internship.title}</b> — ${application.internship.company}${feedbackLine}`
+    );
+  }
+
+  return updated;
 };
 
 module.exports = { apply, getMyApplications, getInternshipApplications, updateStatus };

@@ -9,6 +9,9 @@
     "myInternships": "Менің тағылымдамаларым",
     "users": "Пайдаланушылар",
     "moderation": "Модерация",
+    "faq": "FAQ",
+    "support": "Қолдау",
+    "supportTickets": "Қолдау тикеттері",
     "logout": "Шығу",
     "login": "Кіру",
     "register": "Тіркелу"
@@ -72,5 +75,12 @@
     "en": "English",
     "ru": "Русский",
     "kk": "Қазақша"
+  },
+  "upload": {
+    "uploading": "Жүктелуде...",
+    "replace": "Ауыстыру",
+    "upload": "Жүктеу",
+    "openPdf": "Ағымдағы резюмені ашу",
+    "error": "Жүктеу қатесі"
   }
 }

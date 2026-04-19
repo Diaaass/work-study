@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/Button/Button';
 import { Badge, getStatusVariant } from '@/components/ui/Badge/Badge';
 import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
 import { InternshipStatus } from '@/types/enums';
-import type { Internship, ApiError } from '@/types/models';
+import type { Internship, InternshipStats, ApiError } from '@/types/models';
 import { formatDateShort } from '@/utils/format';
 import styles from './MyInternshipsPage.module.css';
 
-type TabFilter = 'all' | 'published' | 'draft' | 'closed';
+type TabFilter = 'all' | 'published' | 'pending' | 'closed' | 'rejected';
 
 export default function MyInternshipsPage() {
   const { t } = useTranslation('hr');
@@ -22,6 +22,11 @@ export default function MyInternshipsPage() {
   const [loading, setLoading] = useState(true);
   const [closingId, setClosingId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabFilter>('all');
+
+  // Stats modal state
+  const [statsId, setStatsId] = useState<string | null>(null);
+  const [stats, setStats] = useState<InternshipStats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(false);
 
   useEffect(() => {
     internshipsApi
@@ -52,11 +57,33 @@ export default function MyInternshipsPage() {
     }
   };
 
+  const handleOpenStats = async (id: string) => {
+    if (statsId === id) {
+      setStatsId(null);
+      setStats(null);
+      return;
+    }
+    setStatsId(id);
+    setStats(null);
+    setStatsLoading(true);
+    try {
+      const data = await internshipsApi.getStats(id);
+      setStats(data);
+    } catch (err) {
+      const apiErr = err as ApiError;
+      showToast(apiErr.message || 'Ошибка загрузки статистики', 'error');
+      setStatsId(null);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+
   const tabs: { key: TabFilter; label: string }[] = [
-    { key: 'all', label: t('internships.tabAll') },
+    { key: 'all',       label: t('internships.tabAll') },
     { key: 'published', label: t('internships.tabPublished') },
-    { key: 'draft', label: t('internships.tabDraft') },
-    { key: 'closed', label: t('internships.tabClosed') },
+    { key: 'pending',   label: t('internships.tabDraft') },
+    { key: 'closed',    label: t('internships.tabClosed') },
+    { key: 'rejected',  label: t('internships.tabRejected') },
   ];
 
   const filteredInternships = internships.filter((item) => {
@@ -112,57 +139,159 @@ export default function MyInternshipsPage() {
         </div>
       ) : (
         <div className={styles.list}>
-          {filteredInternships.map((internship) => (
-            <div key={internship.id} className={styles.card}>
-              <div className={styles.cardHeader}>
-                <div className={styles.cardTitleRow}>
-                  <h3 className={styles.cardTitle}>{internship.title}</h3>
-                  <Badge variant={getStatusVariant(internship.status)}>
-                    {t(`internships.status.${internship.status}`)}
-                  </Badge>
-                  {!internship.isApproved && (
-                    <span className={styles.warningBadge}>
-                      ⚠ {t('internships.pendingApproval')}
+          {filteredInternships.map((internship) => {
+            const applicantsCount = internship._count?.applications ?? 0;
+            const isStatsOpen = statsId === internship.id;
+
+            return (
+              <div key={internship.id} className={styles.card}>
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardTitleRow}>
+                    <h3 className={styles.cardTitle}>{internship.title}</h3>
+                    <Badge variant={getStatusVariant(internship.status)}>
+                      {t(`internships.status.${internship.status}`)}
+                    </Badge>
+                  </div>
+                </div>
+
+                {/* Причина отклонения */}
+                {internship.status === InternshipStatus.Rejected && (
+                  <div className={styles.rejectionReason}>
+                    <div>
+                      <strong>{t('internships.rejectionReasonLabel')}</strong>
+                      <p>{internship.rejectionReason || t('internships.rejectionReasonNone')}</p>
+                    </div>
+                  </div>
+                )}
+
+                <div className={styles.cardMeta}>
+                  <span className={styles.metaItem}>{internship.city}</span>
+                  <span className={styles.metaItem}>{internship.workType}</span>
+                  {internship.deadline && (
+                    <span className={styles.metaItem}>
+                      {t('internships.deadline')}: {formatDateShort(internship.deadline)}
                     </span>
                   )}
                 </div>
-              </div>
 
-              <div className={styles.cardMeta}>
-                <span className={styles.metaItem}>📍 {internship.location}</span>
-                <span className={styles.metaItem}>💼 {t(`internships.type.${internship.type}`)}</span>
-                <span className={styles.metaItem}>📅 {t('internships.deadline')}: {formatDateShort(internship.deadline)}</span>
-                <Link
-                  to={`/hr/internships/${internship.id}/applicants`}
-                  className={styles.applicantsLink}
-                >
-                  👥 {internship.applicantsCount} {t('internships.applicants')}
-                </Link>
-              </div>
+                {/* Блок статистики */}
+                {isStatsOpen && (
+                  <div className={styles.statsBlock}>
+                    {statsLoading ? (
+                      <div className={styles.statsLoading}>{t('internships.statsLoading')}</div>
+                    ) : stats ? (
+                      <>
+                        <div className={styles.statsGrid}>
+                          <div className={styles.statCard}>
+                            <span className={styles.statValue}>{stats.viewsCount}</span>
+                            <span className={styles.statLabel}>{t('internships.statsViews')}</span>
+                          </div>
+                          <div className={styles.statCard}>
+                            <span className={styles.statValue}>{stats.totalApplications}</span>
+                            <span className={styles.statLabel}>{t('internships.statsTotalApps')}</span>
+                          </div>
+                          <div className={styles.statCard}>
+                            <span className={styles.statValue} style={{ color: 'var(--color-warning)' }}>
+                              {stats.byStatus.pending}
+                            </span>
+                            <span className={styles.statLabel}>{t('internships.statsPending')}</span>
+                          </div>
+                          <div className={styles.statCard}>
+                            <span className={styles.statValue} style={{ color: 'var(--color-success)' }}>
+                              {stats.byStatus.accepted}
+                            </span>
+                            <span className={styles.statLabel}>{t('internships.statsAccepted')}</span>
+                          </div>
+                          <div className={styles.statCard}>
+                            <span className={styles.statValue} style={{ color: 'var(--color-error)' }}>
+                              {stats.byStatus.rejected}
+                            </span>
+                            <span className={styles.statLabel}>{t('internships.statsRejected')}</span>
+                          </div>
+                        </div>
 
-              <div className={styles.cardActions}>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => navigate(`/hr/internships/${internship.id}/applicants`)}
-                >
-                  {t('internships.viewApplicants')}
-                </Button>
-                {internship.status !== InternshipStatus.Closed && (
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    loading={closingId === internship.id}
-                    onClick={() => handleClose(internship.id)}
-                  >
-                    {t('internships.close')}
-                  </Button>
+                        {stats.applicationsByDay.length > 0 && (
+                          <div className={styles.chartSection}>
+                            <p className={styles.chartTitle}>{t('internships.statsChartTitle')}</p>
+                            <MiniBarChart data={stats.applicationsByDay} />
+                          </div>
+                        )}
+                      </>
+                    ) : null}
+                  </div>
                 )}
+
+                <div className={styles.cardActions}>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => navigate(`/hr/internships/${internship.id}/applicants`)}
+                  >
+                    {t('internships.viewApplicants')}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleOpenStats(internship.id)}
+                  >
+                    {isStatsOpen ? t('internships.hideStats') : t('internships.stats')}
+                  </Button>
+                  {internship.status !== InternshipStatus.Closed && (
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      loading={closingId === internship.id}
+                      onClick={() => handleClose(internship.id)}
+                    >
+                      {t('internships.close')}
+                    </Button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Мини бар-чарт без библиотек ──────────────────────────────────────────────
+interface BarChartProps {
+  data: { date: string; count: number }[];
+}
+
+function MiniBarChart({ data }: BarChartProps) {
+  const max = Math.max(...data.map((d) => d.count), 1);
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '80px', overflowX: 'auto', paddingBottom: '4px' }}>
+      {data.map(({ date, count }) => {
+        const heightPct = Math.round((count / max) * 100);
+        const label = date.slice(5); // MM-DD
+        return (
+          <div
+            key={date}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '28px', flex: '1 0 28px' }}
+            title={`${date}: ${count} заявок`}
+          >
+            <span style={{ fontSize: '10px', color: 'var(--color-text-secondary)', marginBottom: '2px' }}>{count}</span>
+            <div
+              style={{
+                width: '100%',
+                height: `${heightPct}%`,
+                minHeight: '4px',
+                background: 'var(--color-primary)',
+                borderRadius: '3px 3px 0 0',
+                opacity: 0.85,
+              }}
+            />
+            <span style={{ fontSize: '9px', color: 'var(--color-text-secondary)', marginTop: '2px', whiteSpace: 'nowrap' }}>
+              {label}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -1,39 +1,51 @@
 import { apiClient } from './client';
 import type { User, Internship } from '@/types/models';
-import type { InternshipStatus } from '@/types/enums';
 
 export const usersApi = {
   getAll(): Promise<User[]> {
     return apiClient<User[]>('/users');
   },
 
-  update(id: string, data: Partial<User>): Promise<User> {
-    return apiClient<User>(`/users/${id}`, {
-      method: 'PUT',
-      body: data,
+  // Admin: toggle block/unblock a user
+  update(id: number | string, _data: Partial<User>): Promise<User> {
+    return apiClient<User>(`/users/${id}/block`, {
+      method: 'PATCH',
     });
   },
 
   updateProfile(data: Partial<User>): Promise<User> {
-    return apiClient<User>('/profile', {
-      method: 'PUT',
+    return apiClient<User>('/users/profile', {
+      method: 'PATCH',
       body: data,
     });
   },
 
-  // Moderation
+  // Moderation: get internships awaiting review
   getPendingInternships(): Promise<Internship[]> {
-    return apiClient<Internship[]>('/moderation/pending');
+    return apiClient<Internship[]>('/internships?status=pending');
   },
 
   moderateInternship(
     id: string,
-    isApproved: boolean,
-    status?: InternshipStatus,
+    _isApproved: boolean,
+    status?: string,
+    rejectionReason?: string,
   ): Promise<Internship> {
-    return apiClient<Internship>(`/moderation/${id}`, {
-      method: 'PUT',
-      body: { isApproved, status },
+    return apiClient<Internship>(`/internships/${id}/moderate`, {
+      method: 'PATCH',
+      body: { status, rejectionReason },
+    });
+  },
+
+  generateTelegramCode(): Promise<{ code: string; botUsername: string }> {
+    return apiClient<{ code: string; botUsername: string }>('/users/telegram/generate-code', {
+      method: 'POST',
+    });
+  },
+
+  disconnectTelegram(): Promise<{ ok: boolean }> {
+    return apiClient<{ ok: boolean }>('/users/telegram/disconnect', {
+      method: 'DELETE',
     });
   },
 };

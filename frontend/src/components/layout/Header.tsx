@@ -59,7 +59,10 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 className={styles.avatar}
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
-                {getInitials(user.name)}
+                {user.avatarUrl
+                  ? <img src={user.avatarUrl} alt={user.name} className={styles.avatarImg} />
+                  : getInitials(user.name)
+                }
               </div>
 
               {dropdownOpen && (

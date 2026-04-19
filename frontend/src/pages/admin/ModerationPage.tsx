@@ -51,7 +51,8 @@ export default function ModerationPage() {
   const handleReject = async (id: string) => {
     setActionLoading(id);
     try {
-      await usersApi.moderateInternship(id, false, InternshipStatus.Draft);
+      const reason = rejectReasons[id]?.trim() || undefined;
+      await usersApi.moderateInternship(id, false, InternshipStatus.Rejected, reason);
       setInternships((prev) => prev.filter((i) => i.id !== id));
       showToast(t('moderation.reject') + ' ✓', 'info');
     } catch (err) {
@@ -97,7 +98,7 @@ export default function ModerationPage() {
                     🏢 {internship.company}
                   </span>
                   <span className={styles.cardMetaItem}>
-                    📍 {internship.location}
+                    📍 {internship.city}
                   </span>
                   <span className={styles.cardMetaItem}>
                     📅 {formatDateShort(internship.createdAt)}

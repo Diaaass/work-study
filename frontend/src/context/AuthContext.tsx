@@ -20,7 +20,8 @@ interface AuthContextValue extends AuthState {
     university?: string;
     major?: string;
     company?: string;
-  }) => Promise<void>;
+  }) => Promise<{ email: string }>;
+  verifyEmail: (email: string, code: string) => Promise<void>;
   logout: () => void;
   hasRole: (role: UserRole) => boolean;
   updateUser: (data: Partial<User>) => void;
@@ -58,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setState({ user, token, isAuthenticated: true, isLoading: false });
   }, []);
 
+  // Регистрация теперь НЕ логинит — возвращает email для редиректа на /verify-email
   const register = useCallback(
     async (data: {
       email: string;
@@ -68,12 +70,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       major?: string;
       company?: string;
     }) => {
-      const { token, user } = await authApi.register(data);
-      localStorage.setItem('ws_token', token);
-      setState({ user, token, isAuthenticated: true, isLoading: false });
+      return authApi.register(data);
     },
     [],
   );
+
+  // Подтверждение email → автологин
+  const verifyEmail = useCallback(async (email: string, code: string) => {
+    const { token, user } = await authApi.verifyEmail(email, code);
+    localStorage.setItem('ws_token', token);
+    setState({ user, token, isAuthenticated: true, isLoading: false });
+  }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem('ws_token');
@@ -93,7 +100,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout, hasRole, updateUser }}>
+    <AuthContext.Provider
+      value={{ ...state, login, register, verifyEmail, logout, hasRole, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

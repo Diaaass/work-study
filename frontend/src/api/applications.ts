@@ -19,7 +19,7 @@ export const applicationsApi = {
   },
 
   getByInternship(internshipId: string): Promise<Application[]> {
-    return apiClient<Application[]>(`/internships/${internshipId}/applicants`);
+    return apiClient<Application[]>(`/applications/internship/${internshipId}`);
   },
 
   updateStatus(
@@ -28,7 +28,7 @@ export const applicationsApi = {
     feedback?: string,
   ): Promise<Application> {
     return apiClient<Application>(`/applications/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       body: { status, feedback },
     });
   },

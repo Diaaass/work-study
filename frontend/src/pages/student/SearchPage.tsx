@@ -63,13 +63,13 @@ export default function SearchPage() {
     }
 
     if (locationFilter !== 'all') {
-      if (internship.location.toLowerCase() !== locationFilter.toLowerCase()) {
+      if (internship.city.toLowerCase() !== locationFilter.toLowerCase()) {
         return false;
       }
     }
 
     if (typeFilter !== 'all') {
-      if (internship.type !== typeFilter) {
+      if (internship.workType !== typeFilter) {
         return false;
       }
     }
@@ -121,9 +121,9 @@ export default function SearchPage() {
             onChange={(e) => setLocationFilter(e.target.value)}
           >
             <option value="all">{t('search.allLocations')}</option>
-            <option value="Almaty">{t('search.almaty')}</option>
-            <option value="Astana">{t('search.astana')}</option>
-            <option value="Remote">{t('search.remote')}</option>
+            <option value="Алматы">{t('search.almaty')}</option>
+            <option value="Астана">{t('search.astana')}</option>
+            <option value="Удалённо">{t('search.remote')}</option>
           </select>
         </div>
 
@@ -136,7 +136,7 @@ export default function SearchPage() {
           >
             <option value="all">{t('search.allTypes')}</option>
             <option value="remote">{t('search.typeRemote')}</option>
-            <option value="onsite">{t('search.typeOnsite')}</option>
+            <option value="office">{t('search.typeOnsite')}</option>
             <option value="hybrid">{t('search.typeHybrid')}</option>
           </select>
         </div>
@@ -164,7 +164,7 @@ export default function SearchPage() {
                 <div className={styles.cardInfo}>
                   <h3 className={styles.cardTitle}>{internship.title}</h3>
                   <p className={styles.cardCompany}>{internship.company}</p>
-                  <p className={styles.cardLocation}>{internship.location}</p>
+                  <p className={styles.cardLocation}>{internship.city}</p>
                 </div>
                 {internship.matchScore != null && (
                   <div className={styles.matchCircle}>
@@ -176,7 +176,7 @@ export default function SearchPage() {
                 )}
               </div>
               <div className={styles.cardFooter}>
-                <Badge variant="info">{internship.type}</Badge>
+                <Badge variant="info">{internship.workType}</Badge>
                 {internship.salary && (
                   <span className={styles.salary}>{internship.salary}</span>
                 )}

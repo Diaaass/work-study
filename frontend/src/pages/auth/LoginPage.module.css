@@ -60,6 +60,15 @@
   font-weight: 500;
 }
 
+.successMessage {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 10px 14px;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
 .langRow {
   display: flex;
   justify-content: center;

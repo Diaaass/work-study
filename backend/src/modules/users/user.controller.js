@@ -1,5 +1,23 @@
 const userService = require('./user.service');
 
+const getTelegramLinkCode = async (req, res) => {
+  try {
+    const result = userService.getTelegramLinkCode(req.userId);
+    res.json(result);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const disconnectTelegram = async (req, res) => {
+  try {
+    await userService.disconnectTelegram(req.userId);
+    res.json({ ok: true });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const getAll = async (req, res) => {
   try {
     const users = await userService.getAll(req.query);
@@ -27,4 +45,4 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { getAll, toggleBlock, updateProfile };
+module.exports = { getAll, toggleBlock, updateProfile, getTelegramLinkCode, disconnectTelegram };

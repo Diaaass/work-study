@@ -53,7 +53,7 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      await register({
+      const result = await register({
         name: form.name,
         email: form.email,
         password: form.password,
@@ -62,7 +62,12 @@ export default function RegisterPage() {
         major: role === 'student' ? form.major : undefined,
         company: role === 'hr' ? form.company : undefined,
       });
-      navigate('/');
+      if (result.autoVerified) {
+        // Email не настроен — аккаунт сразу активен, идём на логин
+        navigate(`/login?registered=1`);
+      } else {
+        navigate(`/verify-email?email=${encodeURIComponent(result.email)}`);
+      }
     } catch (err) {
       const apiErr = err as ApiError;
       if (apiErr.fieldErrors) {

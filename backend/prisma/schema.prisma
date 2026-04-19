@@ -32,25 +32,57 @@ enum ApplicationStatus {
   rejected
 }
 
-model User {
-  id         Int      @id @default(autoincrement())
-  name       String
-  email      String   @unique
-  password   String
-  role       Role     @default(student)
-  isBlocked  Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+enum TicketStatus {
+  open
+  resolved
+}
 
-  // Профиль (только для студентов)
-  university String?
-  major      String?
-  gpa        Float?
-  skills     String[]
-  telegramId String?
+model User {
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String   @unique
+  password       String
+  role           Role     @default(student)
+  isBlocked      Boolean  @default(false)
+  isVerified     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Общий профиль
+  avatarUrl      String?
+  telegramId     String?
+  phone          String?
+  bio            String?
+  skills         String[]
+
+  // Только студент
+  university     String?
+  major          String?
+  gpa            Float?
+  graduationYear Int?
+  resumeUrl      String?
+  cvExperience   Json?    // WorkExperience[]
+  cvLanguages    Json?    // CvLanguage[]
+
+  // Только HR
+  company        String?
 
   internships  Internship[]
   applications Application[]
+  tickets      SupportTicket[]
+}
+
+model SupportTicket {
+  id         Int          @id @default(autoincrement())
+  userId     Int
+  subject    String
+  message    String
+  status     TicketStatus @default(open)
+  adminReply String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Internship {
@@ -63,13 +95,38 @@ model Internship {
   city         String
   workType     WorkType         @default(office)
   salary       Float            @default(0)
-  status       InternshipStatus @default(pending)
-  postedById   Int
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  duration     String?
+  deadline     DateTime?
+  companyLogo     String?
+  status          InternshipStatus @default(pending)
+  rejectionReason String?
+  viewsCount      Int              @default(0)
+  postedById      Int
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   postedBy     User          @relation(fields: [postedById], references: [id])
   applications Application[]
+}
+
+model VerificationCode {
+  id        Int      @id @default(autoincrement())
+  email     String
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+model PasswordReset {
+  id        Int      @id @default(autoincrement())
+  email     String
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
 }
 
 model Application {
@@ -77,6 +134,7 @@ model Application {
   studentId    Int
   internshipId Int
   coverLetter  String
+  resumeUrl    String?
   status       ApplicationStatus @default(pending)
   feedback     String            @default("")
   createdAt    DateTime          @default(now())

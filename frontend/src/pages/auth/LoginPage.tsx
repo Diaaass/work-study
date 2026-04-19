@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/Button/Button';
@@ -11,6 +11,9 @@ export default function LoginPage() {
   const { t, i18n } = useTranslation('auth');
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const passwordResetSuccess = searchParams.get('reset') === '1';
+  const justRegistered = searchParams.get('registered') === '1';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,7 +41,11 @@ export default function LoginPage() {
       await login(email, password);
       navigate('/');
     } catch (err) {
-      const apiErr = err as ApiError;
+      const apiErr = err as ApiError & { code?: string; email?: string };
+      if (apiErr.code === 'EMAIL_NOT_VERIFIED' && apiErr.email) {
+        navigate(`/verify-email?email=${encodeURIComponent(apiErr.email)}`);
+        return;
+      }
       if (apiErr.status === 401) {
         setServerError(t('login.invalidCredentials'));
       } else {
@@ -70,6 +77,12 @@ export default function LoginPage() {
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
+          {justRegistered && (
+            <div className={styles.successMessage}>✅ Аккаунт создан! Войдите в систему.</div>
+          )}
+          {passwordResetSuccess && (
+            <div className={styles.successMessage}>Пароль изменён — войдите с новым паролем</div>
+          )}
           {serverError && <div className={styles.serverError}>{serverError}</div>}
 
           <Input
@@ -96,6 +109,10 @@ export default function LoginPage() {
             {t('login.submit')}
           </Button>
         </form>
+
+        <div className={styles.footer}>
+          <Link to="/forgot-password">Забыли пароль?</Link>
+        </div>
 
         <div className={styles.footer}>
           {t('login.noAccount')}{' '}
