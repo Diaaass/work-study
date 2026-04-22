@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { FileText, ExternalLink, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
+import { useAuth } from '@/hooks/useAuth';
 import { internshipsApi } from '@/api/internships';
 import { applicationsApi } from '@/api/applications';
 import { Card } from '@/components/ui/Card/Card';
@@ -19,6 +21,7 @@ export default function ApplicationFormPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { user } = useAuth();
 
   const [internship, setInternship] = useState<Internship | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,8 +29,9 @@ export default function ApplicationFormPage() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const [coverLetter, setCoverLetter] = useState('');
-  const [resumeUrl, setResumeUrl] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const resumeUrl = user?.resumeUrl ?? '';
 
   useEffect(() => {
     if (!id) return;
@@ -53,9 +57,6 @@ export default function ApplicationFormPage() {
     }
     if (coverLetter.length > MAX_COVER_LETTER) {
       errs.coverLetter = t('apply.coverLetterTooLong');
-    }
-    if (!resumeUrl.trim()) {
-      errs.resumeUrl = t('apply.resumeRequired');
     }
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -116,7 +117,7 @@ export default function ApplicationFormPage() {
         </Card>
       )}
 
-      <h1 className={styles.pageTitle}>{t('apply.title')}</h1>
+      <h1 className={styles.pageTitle}>{t('apply.title', { title: internship?.title })}</h1>
 
       <form
         className={styles.form}
@@ -145,13 +146,29 @@ export default function ApplicationFormPage() {
           </span>
         </div>
 
-        <Input
-          label={t('apply.resume')}
-          value={resumeUrl}
-          onChange={(e) => setResumeUrl(e.target.value)}
-          error={errors.resumeUrl}
-          placeholder={t('apply.resumePlaceholder')}
-        />
+        {/* Resume block */}
+        <div>
+          <p className={styles.resumeLabel}>{t('apply.resume')}</p>
+          {resumeUrl ? (
+            <div className={styles.resumeReady}>
+              <FileText size={18} className={styles.resumeIcon} />
+              <span className={styles.resumeReadyText}>{t('apply.resumeFromProfile')}</span>
+              <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className={styles.resumeLink}>
+                <ExternalLink size={14} /> {t('apply.resumeView')}
+              </a>
+            </div>
+          ) : (
+            <div className={styles.resumeWarning}>
+              <AlertCircle size={18} className={styles.resumeWarningIcon} />
+              <div>
+                <p className={styles.resumeWarningText}>{t('apply.resumeNotFound')}</p>
+                <Link to="/profile" className={styles.resumeLink}>
+                  {t('apply.resumeGoProfile')}
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
 
         <div className={styles.actions}>
           <Button

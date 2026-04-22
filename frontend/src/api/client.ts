@@ -1,5 +1,4 @@
-import { mockDelay } from '@/mock/delay';
-import type { ApiError } from '@/types/models';
+const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api/v1';
 
 interface RequestOptions {
   method?: string;
@@ -13,22 +12,22 @@ export async function apiClient<T>(
 ): Promise<T> {
   const token = localStorage.getItem('ws_token');
 
-  // Simulate network delay
-  await mockDelay(300 + Math.random() * 400);
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
 
-  const { handleRequest } = await import('@/mock/handlers');
+  const response = await fetch(`${BASE_URL}${endpoint}`, {
+    method: options.method ?? 'GET',
+    headers,
+    body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+  });
 
-  try {
-    return await handleRequest<T>(endpoint, {
-      ...options,
-      headers: {
-        ...options.headers,
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-    });
-  } catch (error) {
-    const apiError = error as ApiError;
-    // Re-throw as a structured error
-    throw apiError;
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: 'Ошибка сети' }));
+    throw { status: response.status, ...error };
   }
+
+  return response.json() as Promise<T>;
 }

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { GraduationCap, Briefcase } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/Input/Input';
@@ -53,7 +54,7 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      await register({
+      const result = await register({
         name: form.name,
         email: form.email,
         password: form.password,
@@ -62,7 +63,12 @@ export default function RegisterPage() {
         major: role === 'student' ? form.major : undefined,
         company: role === 'hr' ? form.company : undefined,
       });
-      navigate('/');
+      if (result.autoVerified) {
+        // Email не настроен — аккаунт сразу активен, идём на логин
+        navigate(`/login?registered=1`);
+      } else {
+        navigate(`/verify-email?email=${encodeURIComponent(result.email)}`);
+      }
     } catch (err) {
       const apiErr = err as ApiError;
       if (apiErr.fieldErrors) {
@@ -90,7 +96,7 @@ export default function RegisterPage() {
             className={`${styles.roleCard} ${role === 'student' ? styles.roleCardActive : ''}`}
             onClick={() => setRole('student')}
           >
-            <div className={styles.roleIcon}>🎓</div>
+            <div className={styles.roleIcon}><GraduationCap size={28} /></div>
             <div className={styles.roleName}>{t('register.student')}</div>
             <div className={styles.roleDesc}>{t('register.studentDesc')}</div>
           </div>
@@ -98,7 +104,7 @@ export default function RegisterPage() {
             className={`${styles.roleCard} ${role === 'hr' ? styles.roleCardActive : ''}`}
             onClick={() => setRole('hr')}
           >
-            <div className={styles.roleIcon}>💼</div>
+            <div className={styles.roleIcon}><Briefcase size={28} /></div>
             <div className={styles.roleName}>{t('register.hr')}</div>
             <div className={styles.roleDesc}>{t('register.hrDesc')}</div>
           </div>

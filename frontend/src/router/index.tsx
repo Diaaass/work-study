@@ -7,6 +7,9 @@ import { AppLayout } from '@/components/layout/AppLayout';
 // Auth pages
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
+import VerifyEmailPage from '@/pages/auth/VerifyEmailPage';
+import ForgotPasswordPage from '@/pages/auth/ForgotPasswordPage';
+import ResetPasswordPage from '@/pages/auth/ResetPasswordPage';
 
 // Student pages
 import DashboardPage from '@/pages/student/DashboardPage';
@@ -24,6 +27,11 @@ import ApplicantsPage from '@/pages/hr/ApplicantsPage';
 // Admin pages
 import UsersPage from '@/pages/admin/UsersPage';
 import ModerationPage from '@/pages/admin/ModerationPage';
+import SupportTicketsPage from '@/pages/admin/SupportTicketsPage';
+
+// Support pages
+import FaqPage from '@/pages/support/FaqPage';
+import SupportPage from '@/pages/support/SupportPage';
 
 // Other
 import NotFoundPage from '@/pages/NotFoundPage';
@@ -33,6 +41,9 @@ export const router = createBrowserRouter([
   // Public routes
   { path: '/login', element: <LoginPage /> },
   { path: '/register', element: <RegisterPage /> },
+  { path: '/verify-email', element: <VerifyEmailPage /> },
+  { path: '/forgot-password', element: <ForgotPasswordPage /> },
+  { path: '/reset-password', element: <ResetPasswordPage /> },
 
   // Protected routes
   {
@@ -44,6 +55,11 @@ export const router = createBrowserRouter([
           // Role-based home redirect
           { path: '/', element: <RoleBasedRedirect /> },
 
+          // Shared routes (all roles)
+          { path: '/profile', element: <ProfilePage /> },
+          { path: '/faq', element: <FaqPage /> },
+          { path: '/support', element: <SupportPage /> },
+
           // Student routes
           {
             element: <RoleRoute allowedRoles={[UserRole.Student]} />,
@@ -53,7 +69,6 @@ export const router = createBrowserRouter([
               { path: '/internships/:id', element: <InternshipDetailPage /> },
               { path: '/internships/:id/apply', element: <ApplicationFormPage /> },
               { path: '/my-applications', element: <MyApplicationsPage /> },
-              { path: '/profile', element: <ProfilePage /> },
             ],
           },
 
@@ -73,6 +88,7 @@ export const router = createBrowserRouter([
             children: [
               { path: '/admin/users', element: <UsersPage /> },
               { path: '/admin/moderation', element: <ModerationPage /> },
+              { path: '/admin/support', element: <SupportTicketsPage /> },
             ],
           },
 

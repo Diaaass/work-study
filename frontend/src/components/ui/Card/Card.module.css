@@ -1,6 +1,9 @@
 .card {
-  background-color: #fff;
-  border-radius: var(--border-radius-md);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-lg);
   box-shadow: var(--card-shadow);
   overflow: hidden;
 }

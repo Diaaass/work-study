@@ -1,109 +1,221 @@
 # Work&Study
 
-AI-driven internship matching platform for university students in Kazakhstan.
+Платформа для поиска стажировок для студентов Казахстана.  
+React 19 + TypeScript · Express 5 · Prisma · PostgreSQL 16 · Docker
 
-## Tech Stack
+---
 
-- **Frontend**: React 19 + TypeScript 5.9 + Vite 7
-- **Styling**: CSS Modules with design tokens
-- **Routing**: react-router-dom v7 (protected + role-based routes)
-- **i18n**: react-i18next (Russian, English, Kazakh)
-- **API**: Mock data layer (ready to swap for real backend)
+## 🚀 Быстрый старт (5 минут)
 
-## Getting Started
+### Нужно установить
+
+| Инструмент | Ссылка |
+|---|---|
+| **Docker Desktop** | https://www.docker.com/products/docker-desktop/ |
+| Git | https://git-scm.com |
+
+> Node.js и PostgreSQL устанавливать **не нужно** — всё запускается в контейнерах.
+
+---
+
+### Шаги
 
 ```bash
-# Install dependencies
+# 1. Клонировать репозиторий
+git clone <URL_РЕПОЗИТОРИЯ>
+cd work-study
+
+# 2. Создать файл конфигурации
+cp .env.example .env
+
+# 3. Запустить проект
+docker compose up --build
+```
+
+Первый запуск занимает **3–5 минут** (скачивает Node, nginx, PostgreSQL).
+
+После успешного запуска открой браузер:
+
+| Адрес | Что |
+|---|---|
+| **http://localhost** | Фронтенд (React) |
+| http://localhost:8000 | API бэкенда |
+
+> **Порт 80 должен быть свободен.** Если занят — смотри раздел «Изменить порт» ниже.
+
+---
+
+## 🔑 Тестовые аккаунты
+
+После запуска в БД автоматически создаются демо-данные:
+
+| Роль | Email | Пароль |
+|---|---|---|
+| **Администратор** | admin@workstud.kz | Admin123! |
+| HR (Kaspi.kz) | hr.kaspi@workstud.kz | Hr123456! |
+| HR (Kolesa Group) | hr.kolesa@workstud.kz | Hr123456! |
+| HR (2GIS) | hr.2gis@workstud.kz | Hr123456! |
+| HR (Jusan Bank) | hr.jusan@workstud.kz | Hr123456! |
+| HR (Freedom Finance) | hr.freedom@workstud.kz | Hr123456! |
+| HR (Beeline) | hr.beeline@workstud.kz | Hr123456! |
+
+Студентом можно зарегистрироваться через кнопку **«Регистрация»**.  
+Email-подтверждение **не требуется** — аккаунт активируется сразу.
+
+---
+
+## ⚙️ Конфигурация `.env`
+
+Файл `.env` работает из коробки без изменений.  
+Опциональные сервисы — включаются по мере необходимости:
+
+### Cloudinary (загрузка аватарок и резюме)
+
+1. Зарегистрируйся на [cloudinary.com](https://cloudinary.com) (бесплатно)
+2. Скопируй `Cloud Name`, `API Key`, `API Secret` из Dashboard
+3. Вставь в `.env` и перезапусти: `docker compose up --build`
+
+```env
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=123456789
+CLOUDINARY_API_SECRET=abc123...
+```
+
+### Gmail SMTP (письма верификации и сброса пароля)
+
+По умолчанию `AUTO_VERIFY=true` — письма не нужны.  
+Если нужны реальные письма:
+
+1. Включи двухфакторку в Google-аккаунте
+2. Создай «Пароль приложения»: [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+3. Вставь в `.env`:
+
+```env
+AUTO_VERIFY=false
+GMAIL_USER=your@gmail.com
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx
+```
+
+### Telegram Bot (уведомления о статусах заявок)
+
+1. Напиши `@BotFather` в Telegram → `/newbot`
+2. Вставь токен в `.env`:
+
+```env
+TELEGRAM_BOT_TOKEN=1234567890:ABCdef...
+TELEGRAM_BOT_USERNAME=YourBotName
+```
+
+---
+
+## 🛠 Полезные команды
+
+```bash
+# Запустить в фоне (без логов в терминале)
+docker compose up -d --build
+
+# Посмотреть логи всех сервисов
+docker compose logs -f
+
+# Логи только бэкенда
+docker compose logs -f backend
+
+# Остановить
+docker compose down
+
+# Полный сброс (удалить данные БД)
+docker compose down -v
+```
+
+---
+
+## Изменить порт
+
+Если порт 80 занят, отредактируй `docker-compose.yml`:
+
+```yaml
+  frontend:
+    ports:
+      - "3000:80"   # было "80:80" → теперь открывай http://localhost:3000
+```
+
+---
+
+## 👩‍💻 Разработка (с горячей перезагрузкой)
+
+Если нужна активная разработка с hot-reload:
+
+```bash
+# 1. Запустить только БД
+docker compose up db -d
+
+# 2. Бэкенд
+cd backend
+cp .env.example .env
+# В .env поставь: DATABASE_URL=postgresql://postgres:postgres@localhost:5433/workstudy?schema=public
 npm install
+npx prisma migrate deploy
+node prisma/seed.js && node prisma/seed-internships.js
+npm run dev        # → http://localhost:8000
 
-# Start dev server
-npm run dev
-
-# Production build
-npm run build
-
-# Preview production build
-npm run preview
+# 3. Фронтенд (новый терминал)
+cd frontend
+cp .env.example .env
+# В .env поставь: VITE_API_URL=http://localhost:8000/api/v1
+npm install
+npm run dev        # → http://localhost:5173
 ```
 
-The app will be available at `http://localhost:5173`
+---
 
-## Test Accounts
+## 🏗 Стек
 
-| Email              | Password      | Role        |
-|--------------------|---------------|-------------|
-| student@test.com   | password123   | Student     |
-| hr@test.com        | password123   | HR Manager  |
-| admin@test.com     | password123   | Admin       |
+| | Технология |
+|---|---|
+| Фронтенд | React 19, TypeScript, Vite 7, React Router 7, i18next (ru / en / kk) |
+| Бэкенд | Node.js 20, Express 5, Prisma ORM |
+| База данных | PostgreSQL 16 |
+| Авторизация | JWT + bcrypt + email-верификация |
+| Файлы | Cloudinary |
+| Письма | Gmail SMTP (nodemailer) |
+| Уведомления | Telegram Bot API |
+| PDF / CV | @react-pdf/renderer + Roboto TTF |
+| Деплой | Docker + nginx |
 
-## Project Structure
+---
+
+## 📁 Структура
 
 ```
-src/
-  api/                 # API client + typed modules (auth, internships, applications, users)
-  assets/              # Static assets
-  components/
-    layout/            # AppLayout, Header, Sidebar
-    ui/                # Reusable UI kit (Button, Input, Card, Badge, Modal, Skeleton, Toast)
-  context/             # AuthContext, ToastContext
-  hooks/               # useAuth, useToast
-  i18n/                # i18next config + locales (en, ru, kk)
-  mock/                # Mock data + API handlers
-  pages/
-    auth/              # Login, Register
-    student/           # Dashboard, Search, InternshipDetail, ApplicationForm, MyApplications, Profile
-    hr/                # PostInternship, MyInternships, Applicants
-    admin/             # Users, Moderation
-  router/              # Route definitions, ProtectedRoute, RoleRoute
-  styles/              # Design tokens (variables.css), global styles
-  types/               # TypeScript types and enums
-  utils/               # Validation, date formatting helpers
+work-study/
+├── docker-compose.yml            # Полный стек: БД + бэкенд + фронтенд
+├── .env.example                  # Шаблон конфигурации → скопировать в .env
+├── backend/
+│   ├── Dockerfile
+│   ├── src/
+│   │   ├── modules/              # auth, users, internships, applications, support, upload
+│   │   └── services/             # email, cloudinary, telegram
+│   └── prisma/
+│       ├── schema.prisma
+│       ├── migrations/
+│       ├── seed.js               # admin-аккаунт
+│       └── seed-internships.js   # 16 стажировок от 6 компаний
+└── frontend/
+    ├── Dockerfile
+    ├── nginx.conf
+    ├── public/fonts/             # Roboto TTF (для генерации PDF/CV)
+    └── src/
+        ├── pages/                # student/, hr/, admin/, auth/, support/
+        ├── components/
+        └── i18n/                 # Переводы ru / en / kk
 ```
 
-## Features
+---
 
-### Student
-- AI-powered internship recommendations (ranked by match score)
-- Search with filters (city, work type, skills)
-- Internship detail pages with full info
-- Application form with cover letter
-- Application tracking with status badges
-- Profile management with skills
+## 👥 Роли
 
-### HR Manager
-- Post internships with requirements and skills
-- Manage listings (publish, close)
-- Review applicants (accept/reject with feedback)
-
-### Admin
-- Users management table (search, filter, block/unblock)
-- Internship moderation queue (approve/reject)
-
-## Design System
-
-Inspired by hh.ru (HeadHunter) — clean, professional job board aesthetic.
-
-- **Primary**: #2557A7 | **Hover**: #1A4285
-- **Background**: #FFFFFF | **Surface**: #F5F7FA
-- **Text**: #0D1B2A | **Secondary text**: #6B7A99
-- **Success**: #17A05E | **Error**: #D9360B
-- **Font**: Inter, 14-16px
-- **Cards**: 8px radius, subtle shadow
-- **Mobile-first** responsive design
-
-## API Integration
-
-The frontend uses a mock API layer in `src/mock/handlers.ts`. To connect a real backend:
-
-1. Update `src/api/client.ts` to make real `fetch()` calls instead of importing mock handlers
-2. Set the `API_BASE_URL` environment variable
-3. All API modules (`src/api/*.ts`) remain unchanged — they use typed interfaces
-
-## i18n
-
-Three languages supported:
-- **Russian** (default fallback)
-- **English**
-- **Kazakh**
-
-Translation files are in `src/i18n/locales/{lang}/`. Namespaces: `common`, `auth`, `student`, `hr`, `admin`.
+| Роль | Возможности |
+|---|---|
+| **student** | Поиск стажировок, подача заявок, профиль, генерация CV (PDF) |
+| **hr** | Создание и управление вакансиями, просмотр заявок, обратная связь |
+| **admin** | Управление пользователями, модерация вакансий, поддержка |

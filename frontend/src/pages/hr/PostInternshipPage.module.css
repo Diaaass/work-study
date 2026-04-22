@@ -27,7 +27,7 @@
 }
 
 .section {
-  background: #fff;
+  background: var(--color-surface);
   border-radius: var(--border-radius-md);
   box-shadow: var(--card-shadow);
   padding: var(--spacing-xl);
@@ -84,7 +84,7 @@
   transition: all var(--transition-fast);
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
-  background: #fff;
+  background: var(--color-surface);
   user-select: none;
 }
 
@@ -135,7 +135,7 @@
   justify-content: center;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-sm);
-  background: #fff;
+  background: var(--color-surface);
   color: var(--color-error);
   cursor: pointer;
   font-size: var(--font-size-lg);

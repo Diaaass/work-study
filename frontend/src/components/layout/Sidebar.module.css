@@ -1,6 +1,7 @@
+/* ─── Sidebar shell ─────────────────────────────────────────────────────────── */
 .sidebar {
   width: var(--sidebar-width);
-  background-color: #fff;
+  background: var(--sidebar-bg);
   border-right: 1px solid var(--color-border);
   height: calc(100vh - var(--header-height));
   position: sticky;
@@ -8,50 +9,79 @@
   flex-shrink: 0;
   padding: var(--spacing-md) 0;
   overflow-y: auto;
+  transition: background var(--transition-smooth), border-color var(--transition-smooth);
 }
 
-.overlay {
-  display: none;
+.overlay { display: none; }
+
+/* ─── Nav list ──────────────────────────────────────────────────────────────── */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 var(--spacing-sm);
 }
 
+/* ─── Nav item ──────────────────────────────────────────────────────────────── */
 .navItem {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: 10px var(--spacing-lg);
+  gap: 10px;
+  padding: 9px 12px;
   font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--color-text-secondary);
   text-decoration: none;
-  transition: all var(--transition-fast);
-  border-left: 3px solid transparent;
+  border-radius: var(--border-radius-md);
+  transition: background var(--transition-fast), color var(--transition-fast);
+  user-select: none;
 }
 
 .navItem:hover {
-  background-color: var(--color-surface);
+  background: var(--sidebar-hover-bg);
   color: var(--color-text-primary);
 }
 
+/* ─── Active pill ───────────────────────────────────────────────────────────── */
 .navItemActive {
-  color: var(--color-primary);
-  background-color: var(--color-primary-light);
-  border-left-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
 }
 
+.navItemActive:hover {
+  background: var(--color-primary-hover);
+  color: #fff;
+}
+
+/* ─── Icon ──────────────────────────────────────────────────────────────────── */
 .navIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
+  width: 20px;
   flex-shrink: 0;
+  opacity: 0.45;
+  transition: opacity var(--transition-fast);
 }
 
-.divider {
-  height: 1px;
-  background-color: var(--color-border);
-  margin: var(--spacing-sm) var(--spacing-lg);
+.navItem:hover .navIcon {
+  opacity: 0.75;
 }
 
+.navItemActive .navIcon {
+  opacity: 1;
+}
+
+/* ─── Label ─────────────────────────────────────────────────────────────────── */
+.navLabel {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Mobile ────────────────────────────────────────────────────────────────── */
 @media (max-width: 767px) {
   .sidebar {
     position: fixed;
@@ -60,7 +90,7 @@
     height: 100vh;
     z-index: 150;
     transform: translateX(-100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     padding-top: calc(var(--header-height) + var(--spacing-md));
   }
 
@@ -72,11 +102,12 @@
     display: block;
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
     z-index: 140;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.28s ease;
   }
 
   .overlayVisible {

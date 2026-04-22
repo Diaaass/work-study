@@ -58,7 +58,7 @@
 }
 
 .tabActive {
-  background-color: #fff;
+  background-color: var(--color-primary);
   color: var(--color-primary);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -66,7 +66,7 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: var(--border-radius-md);
   box-shadow: var(--card-shadow);
   overflow: hidden;
@@ -138,7 +138,7 @@
 }
 
 .mobileCard {
-  background: #fff;
+  background: var(--color-surface);
   border-radius: var(--border-radius-md);
   box-shadow: var(--card-shadow);
   padding: var(--spacing-md);

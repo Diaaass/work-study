@@ -3,14 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/useToast';
 import { internshipsApi } from '@/api/internships';
+import { uploadApi } from '@/api/upload';
 import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/Input/Input';
+import { FileUpload } from '@/components/ui/FileUpload/FileUpload';
 import { InternshipType } from '@/types/enums';
 import type { ApiError } from '@/types/models';
 import styles from './PostInternshipPage.module.css';
 
 interface FormData {
   title: string;
+  company: string;
   location: string;
   type: InternshipType;
   description: string;
@@ -28,6 +31,7 @@ export default function PostInternshipPage() {
 
   const [form, setForm] = useState<FormData>({
     title: '',
+    company: '',
     location: '',
     type: InternshipType.Remote,
     description: '',
@@ -38,6 +42,7 @@ export default function PostInternshipPage() {
     skills: [],
   });
 
+  const [logoUrl, setLogoUrl] = useState('');
   const [skillInput, setSkillInput] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState('');
@@ -52,7 +57,7 @@ export default function PostInternshipPage() {
 
   const typeOptions = [
     { value: InternshipType.Remote, label: t('post.typeRemote') },
-    { value: InternshipType.Onsite, label: t('post.typeOnsite') },
+    { value: InternshipType.Office, label: t('post.typeOnsite') },
     { value: InternshipType.Hybrid, label: t('post.typeHybrid') },
   ];
 
@@ -107,6 +112,7 @@ export default function PostInternshipPage() {
   const validate = (): boolean => {
     const errs: Record<string, string> = {};
     if (!form.title.trim()) errs.title = t('post.required');
+    if (!form.company.trim()) errs.company = t('post.required');
     if (!form.description.trim()) errs.description = t('post.required');
     if (!form.location) errs.location = t('post.required');
     if (!form.duration.trim()) errs.duration = t('post.required');
@@ -125,11 +131,13 @@ export default function PostInternshipPage() {
       const filteredRequirements = form.requirements.filter((r) => r.trim());
       await internshipsApi.create({
         title: form.title.trim(),
-        location: form.location,
-        type: form.type,
+        company: form.company.trim(),
+        companyLogo: logoUrl || undefined,
+        city: form.location,
+        workType: form.type,
         description: form.description.trim(),
         duration: form.duration.trim(),
-        salary: form.salary.trim() || undefined,
+        salary: form.salary.trim() ? Number(form.salary.trim().replace(/[^\d.]/g, '')) || undefined : undefined,
         deadline: form.deadline,
         requirements: filteredRequirements,
         skills: form.skills,
@@ -167,6 +175,26 @@ export default function PostInternshipPage() {
               onChange={(e) => updateField('title', e.target.value)}
               error={errors.title}
               placeholder={t('post.titlePlaceholder')}
+            />
+
+            <Input
+              label={t('post.company')}
+              value={form.company}
+              onChange={(e) => updateField('company', e.target.value)}
+              error={errors.company}
+              placeholder={t('post.company')}
+            />
+
+            <FileUpload
+              accept="image/*"
+              label={t('post.companyLogo')}
+              hint={t('post.companyLogoHint')}
+              type="image"
+              currentUrl={logoUrl}
+              onUpload={async (file) => {
+                const url = await uploadApi.logo(file);
+                setLogoUrl(url);
+              }}
             />
 
             <div className={styles.row}>

@@ -9,6 +9,9 @@
     "myInternships": "My Internships",
     "users": "Users",
     "moderation": "Moderation",
+    "faq": "FAQ",
+    "support": "Support",
+    "supportTickets": "Support Tickets",
     "logout": "Log out",
     "login": "Log in",
     "register": "Sign up"
@@ -72,5 +75,12 @@
     "en": "English",
     "ru": "Русский",
     "kk": "Қазақша"
+  },
+  "upload": {
+    "uploading": "Uploading...",
+    "replace": "Replace",
+    "upload": "Upload",
+    "openPdf": "Open current resume",
+    "error": "Upload error"
   }
 }

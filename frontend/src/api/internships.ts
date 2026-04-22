@@ -1,5 +1,5 @@
 import { apiClient } from './client';
-import type { Internship } from '@/types/models';
+import type { Internship, InternshipStats } from '@/types/models';
 
 export const internshipsApi = {
   getAll(): Promise<Internship[]> {
@@ -27,8 +27,12 @@ export const internshipsApi = {
 
   update(id: string, data: Partial<Internship>): Promise<Internship> {
     return apiClient<Internship>(`/internships/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       body: data,
     });
+  },
+
+  getStats(id: string): Promise<InternshipStats> {
+    return apiClient<InternshipStats>(`/internships/${id}/stats`);
   },
 };

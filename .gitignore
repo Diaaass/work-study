@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables — никогда не коммитить!
+.env
+**/.env

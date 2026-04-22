@@ -31,7 +31,7 @@ export default function InternshipDetailPage() {
           applicationsApi.getMy(),
         ]);
         setInternship(internshipData);
-        const applied = myApps.find((a) => a.internshipId === id);
+        const applied = myApps.find((a) => String(a.internshipId) === id);
         if (applied) {
           setExistingApp(applied);
         }
@@ -93,8 +93,8 @@ export default function InternshipDetailPage() {
             <h1 className={styles.title}>{internship.title}</h1>
             <p className={styles.company}>{internship.company}</p>
             <div className={styles.meta}>
-              <Badge variant="info">{internship.location}</Badge>
-              <Badge variant="neutral">{internship.type}</Badge>
+              <Badge variant="info">{internship.city}</Badge>
+              <Badge variant="neutral">{internship.workType}</Badge>
               <span className={styles.posted}>
                 {timeAgo(internship.createdAt)}
               </span>
@@ -155,14 +155,12 @@ export default function InternshipDetailPage() {
           <div className={styles.sidebarRow}>
             <span className={styles.sidebarLabel}>{t('detail.deadline')}</span>
             <span className={styles.sidebarValue}>
-              {formatDate(internship.deadline)}
+              {internship.deadline ? formatDate(internship.deadline) : '—'}
             </span>
           </div>
           <div className={styles.sidebarRow}>
-            <span className={styles.sidebarLabel}>{t('detail.applicants')}</span>
-            <span className={styles.sidebarValue}>
-              {internship.applicantsCount}
-            </span>
+            <span className={styles.sidebarLabel}>{t('detail.applicantsLabel')}</span>
+            <span className={styles.sidebarValue}>{internship.applicantsCount ?? 0}</span>
           </div>
 
           <div className={styles.sidebarActions}>

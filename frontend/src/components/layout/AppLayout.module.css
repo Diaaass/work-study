@@ -1,6 +1,59 @@
+.spotlight {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.1s ease;
+}
+
+/* Floating blobs */
+.blob1,
+.blob2,
+.blob3 {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  z-index: 0;
+}
+
+.blob1 {
+  width: 650px;
+  height: 650px;
+  top: -180px;
+  left: -200px;
+  background: radial-gradient(circle, rgba(232, 164, 74, 0.30) 0%, rgba(200, 130, 50, 0.12) 50%, transparent 70%);
+  animation: blobFloat1 18s ease-in-out infinite;
+}
+
+.blob2 {
+  width: 560px;
+  height: 560px;
+  bottom: -120px;
+  right: -150px;
+  background: radial-gradient(circle, rgba(196, 120, 60, 0.25) 0%, rgba(180, 100, 40, 0.10) 50%, transparent 70%);
+  animation: blobFloat2 22s ease-in-out infinite;
+}
+
+.blob3 {
+  width: 380px;
+  height: 380px;
+  top: 38%;
+  right: 18%;
+  background: radial-gradient(circle, rgba(240, 180, 80, 0.18) 0%, rgba(220, 150, 50, 0.08) 50%, transparent 70%);
+  animation: blobFloat3 15s ease-in-out infinite;
+}
+
+[data-theme="light"] .blob1 { background: radial-gradient(circle, rgba(232, 164, 74, 0.12) 0%, transparent 70%); }
+[data-theme="light"] .blob2 { background: radial-gradient(circle, rgba(196, 120, 60, 0.09) 0%, transparent 70%); }
+[data-theme="light"] .blob3 { background: radial-gradient(circle, rgba(240, 180, 80, 0.08) 0%, transparent 70%); }
+[data-theme="light"] .spotlight { display: none; }
+
 .layout {
   display: flex;
   min-height: calc(100vh - var(--header-height));
+  position: relative;
+  z-index: 1;
 }
 
 .main {

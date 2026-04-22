@@ -11,6 +11,8 @@ import {
   FileText,
   Users,
   ShieldCheck,
+  HelpCircle,
+  MessageSquare,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import styles from './Sidebar.module.css';
@@ -26,7 +28,7 @@ interface NavItem {
   icon: LucideIcon;
 }
 
-const ICON_SIZE = 20;
+const ICON_SIZE = 18;
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { t } = useTranslation();
@@ -37,28 +39,30 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { to: '/search', label: t('nav.search'), icon: Search },
     { to: '/my-applications', label: t('nav.myApplications'), icon: ClipboardList },
     { to: '/profile', label: t('nav.profile'), icon: User },
+    { to: '/faq', label: t('nav.faq'), icon: HelpCircle },
+    { to: '/support', label: t('nav.support'), icon: MessageSquare },
   ];
 
   const hrNav: NavItem[] = [
     { to: '/hr/post', label: t('nav.postInternship'), icon: PlusCircle },
     { to: '/hr/internships', label: t('nav.myInternships'), icon: FileText },
+    { to: '/profile', label: t('nav.profile'), icon: User },
+    { to: '/faq', label: t('nav.faq'), icon: HelpCircle },
+    { to: '/support', label: t('nav.support'), icon: MessageSquare },
   ];
 
   const adminNav: NavItem[] = [
     { to: '/admin/users', label: t('nav.users'), icon: Users },
     { to: '/admin/moderation', label: t('nav.moderation'), icon: ShieldCheck },
+    { to: '/admin/support', label: t('nav.supportTickets'), icon: MessageSquare },
   ];
 
   const getNavItems = (): NavItem[] => {
     switch (user?.role) {
-      case UserRole.Student:
-        return studentNav;
-      case UserRole.HR:
-        return hrNav;
-      case UserRole.Admin:
-        return adminNav;
-      default:
-        return [];
+      case UserRole.Student: return studentNav;
+      case UserRole.HR: return hrNav;
+      case UserRole.Admin: return adminNav;
+      default: return [];
     }
   };
 
@@ -71,24 +75,30 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         onClick={onClose}
       />
       <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `${styles.navItem} ${isActive ? styles.navItemActive : ''}`
-              }
-              onClick={onClose}
-            >
-              <span className={styles.navIcon}>
-                <Icon size={ICON_SIZE} strokeWidth={2} />
-              </span>
-              {item.label}
-            </NavLink>
-          );
-        })}
+        <nav className={styles.nav}>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `${styles.navItem} ${isActive ? styles.navItemActive : ''}`
+                }
+                onClick={onClose}
+              >
+                {({ isActive }) => (
+                  <>
+                    <span className={styles.navIcon}>
+                      <Icon size={ICON_SIZE} strokeWidth={isActive ? 2.5 : 1.75} />
+                    </span>
+                    <span className={styles.navLabel}>{item.label}</span>
+                  </>
+                )}
+              </NavLink>
+            );
+          })}
+        </nav>
       </aside>
     </>
   );
