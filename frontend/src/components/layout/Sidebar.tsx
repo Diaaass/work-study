@@ -28,7 +28,7 @@ interface NavItem {
   icon: LucideIcon;
 }
 
-const ICON_SIZE = 20;
+const ICON_SIZE = 18;
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { t } = useTranslation();
@@ -59,14 +59,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const getNavItems = (): NavItem[] => {
     switch (user?.role) {
-      case UserRole.Student:
-        return studentNav;
-      case UserRole.HR:
-        return hrNav;
-      case UserRole.Admin:
-        return adminNav;
-      default:
-        return [];
+      case UserRole.Student: return studentNav;
+      case UserRole.HR: return hrNav;
+      case UserRole.Admin: return adminNav;
+      default: return [];
     }
   };
 
@@ -79,24 +75,30 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         onClick={onClose}
       />
       <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `${styles.navItem} ${isActive ? styles.navItemActive : ''}`
-              }
-              onClick={onClose}
-            >
-              <span className={styles.navIcon}>
-                <Icon size={ICON_SIZE} strokeWidth={2} />
-              </span>
-              {item.label}
-            </NavLink>
-          );
-        })}
+        <nav className={styles.nav}>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `${styles.navItem} ${isActive ? styles.navItemActive : ''}`
+                }
+                onClick={onClose}
+              >
+                {({ isActive }) => (
+                  <>
+                    <span className={styles.navIcon}>
+                      <Icon size={ICON_SIZE} strokeWidth={isActive ? 2.5 : 1.75} />
+                    </span>
+                    <span className={styles.navLabel}>{item.label}</span>
+                  </>
+                )}
+              </NavLink>
+            );
+          })}
+        </nav>
       </aside>
     </>
   );

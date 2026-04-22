@@ -8,7 +8,7 @@
 }
 
 .card {
-  background: #fff;
+  background: var(--color-surface);
   border-radius: var(--border-radius-md);
   box-shadow: var(--card-shadow);
   padding: var(--spacing-2xl);
@@ -80,7 +80,7 @@
 }
 
 .successMessage {
-  background-color: #d1fae5;
+  background-color: var(--color-success-light);
   color: #065f46;
   padding: 10px 14px;
   border-radius: var(--border-radius-sm);

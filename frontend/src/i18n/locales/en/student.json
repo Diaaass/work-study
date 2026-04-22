@@ -53,7 +53,8 @@
     "backToSearch": "Back to search",
     "error": "Error",
     "notFound": "Internship not found",
-    "negotiable": "Negotiable"
+    "negotiable": "Negotiable",
+    "applicantsLabel": "Applicants"
   },
   "apply": {
     "title": "Apply for {{title}}",
@@ -73,7 +74,11 @@
     "alreadyApplied": "You have already applied to this internship",
     "error": "Failed to submit application",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "resumeFromProfile": "Resume from your profile will be used",
+    "resumeView": "View",
+    "resumeNotFound": "No resume found. Generate one in your profile first.",
+    "resumeGoProfile": "Go to profile →"
   },
   "applications": {
     "title": "My Applications",

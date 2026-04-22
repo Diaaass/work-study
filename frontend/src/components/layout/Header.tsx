@@ -1,13 +1,21 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Menu, User, LogOut, Zap } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { getInitials } from '@/utils/format';
+import { ThemeToggle } from '@/components/ui/ThemeToggle/ThemeToggle';
 import styles from './Header.module.css';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
 }
+
+const ROLE_LABELS: Record<string, string> = {
+  student: 'Студент',
+  hr: 'HR',
+  admin: 'Админ',
+};
 
 export function Header({ onToggleSidebar }: HeaderProps) {
   const { t, i18n } = useTranslation();
@@ -32,14 +40,17 @@ export function Header({ onToggleSidebar }: HeaderProps) {
       <div className={styles.inner}>
         <div className={styles.left}>
           <button className={styles.hamburger} onClick={onToggleSidebar} aria-label="Menu">
-            ☰
+            <Menu size={20} />
           </button>
           <Link to="/" className={styles.logo}>
-            Work&Study
+            <span className={styles.logoIcon}><Zap size={17} /></span>
+            <span className={styles.logoText}>Work&amp;Study</span>
           </Link>
         </div>
 
         <div className={styles.right}>
+          <ThemeToggle />
+
           <div className={styles.langSwitcher}>
             {languages.map((lang) => (
               <button
@@ -54,26 +65,53 @@ export function Header({ onToggleSidebar }: HeaderProps) {
 
           {user && (
             <div className={styles.userSection} ref={dropdownRef}>
-              <span className={styles.userName}>{user.name}</span>
-              <div
-                className={styles.avatar}
+              <button
+                className={styles.avatarBtn}
                 onClick={() => setDropdownOpen(!dropdownOpen)}
+                aria-label="User menu"
+                aria-expanded={dropdownOpen}
               >
-                {user.avatarUrl
-                  ? <img src={user.avatarUrl} alt={user.name} className={styles.avatarImg} />
-                  : getInitials(user.name)
-                }
-              </div>
+                <div className={styles.avatarRing}>
+                  <div className={styles.avatar}>
+                    {user.avatarUrl
+                      ? <img src={user.avatarUrl} alt={user.name} className={styles.avatarImg} />
+                      : getInitials(user.name)
+                    }
+                  </div>
+                </div>
+                <span className={styles.userName}>{user.name}</span>
+              </button>
 
               {dropdownOpen && (
                 <div className={styles.dropdown}>
+                  <div className={styles.dropdownHeader}>
+                    <div className={styles.dropdownAvatar}>
+                      {user.avatarUrl
+                        ? <img src={user.avatarUrl} alt={user.name} className={styles.avatarImg} />
+                        : getInitials(user.name)
+                      }
+                    </div>
+                    <div className={styles.dropdownUserInfo}>
+                      <span className={styles.dropdownName}>{user.name}</span>
+                      <span className={styles.dropdownRole}>
+                        {ROLE_LABELS[user.role] ?? user.role}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles.dropdownDivider} />
+
                   <Link
                     to="/profile"
                     className={styles.dropdownItem}
                     onClick={() => setDropdownOpen(false)}
                   >
+                    <User size={14} className={styles.dropdownIcon} />
                     {t('nav.profile')}
                   </Link>
+
+                  <div className={styles.dropdownDivider} />
+
                   <button
                     className={`${styles.dropdownItem} ${styles.dropdownItemDanger}`}
                     onClick={() => {
@@ -81,6 +119,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                       logout();
                     }}
                   >
+                    <LogOut size={14} className={styles.dropdownIcon} />
                     {t('nav.logout')}
                   </button>
                 </div>

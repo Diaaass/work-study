@@ -21,7 +21,6 @@ Font.registerHyphenationCallback((word) => [word]);
 const ACCENT  = '#2563eb';
 const TEXT    = '#111827';
 const MUTED   = '#6b7280';
-const LIGHT   = '#eff6ff';
 const BORDER  = '#e5e7eb';
 const PILL_BG = '#eff6ff';
 const PILL_BD = '#bfdbfe';
@@ -221,7 +220,7 @@ const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 function fmtDate(v: string): string {
   if (!v) return '';
   const [year, month] = v.split('-');
-  return `${MONTHS[(parseInt(month, 10) - 1) ?? 0]} ${year}`.trim();
+  return `${MONTHS[parseInt(month, 10) - 1]} ${year}`.trim();
 }
 
 // ─── Types ───────────────────────────────────────────────────────────────────

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { GraduationCap, Briefcase } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/Input/Input';
@@ -95,7 +96,7 @@ export default function RegisterPage() {
             className={`${styles.roleCard} ${role === 'student' ? styles.roleCardActive : ''}`}
             onClick={() => setRole('student')}
           >
-            <div className={styles.roleIcon}>🎓</div>
+            <div className={styles.roleIcon}><GraduationCap size={28} /></div>
             <div className={styles.roleName}>{t('register.student')}</div>
             <div className={styles.roleDesc}>{t('register.studentDesc')}</div>
           </div>
@@ -103,7 +104,7 @@ export default function RegisterPage() {
             className={`${styles.roleCard} ${role === 'hr' ? styles.roleCardActive : ''}`}
             onClick={() => setRole('hr')}
           >
-            <div className={styles.roleIcon}>💼</div>
+            <div className={styles.roleIcon}><Briefcase size={28} /></div>
             <div className={styles.roleName}>{t('register.hr')}</div>
             <div className={styles.roleDesc}>{t('register.hrDesc')}</div>
           </div>

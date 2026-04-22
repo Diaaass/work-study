@@ -47,7 +47,7 @@ export default function MyApplicationsPage() {
       : applications.filter((a) => a.status === activeTab);
 
   const sorted = [...filtered].sort(
-    (a, b) => new Date(b.appliedAt).getTime() - new Date(a.appliedAt).getTime(),
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 
   if (loading) {
@@ -111,7 +111,7 @@ export default function MyApplicationsPage() {
                     {app.internship?.company}
                   </p>
                   <span className={styles.appDate}>
-                    {t('applications.appliedOn')} {formatDateShort(app.appliedAt)}
+                    {t('applications.appliedOn')} {formatDateShort(app.createdAt)}
                   </span>
                 </div>
                 <Badge variant={getStatusVariant(app.status)} size="md">

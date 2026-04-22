@@ -53,7 +53,8 @@
     "backToSearch": "К поиску",
     "error": "Ошибка",
     "notFound": "Стажировка не найдена",
-    "negotiable": "По договорённости"
+    "negotiable": "По договорённости",
+    "applicantsLabel": "Заявок"
   },
   "apply": {
     "title": "Отклик на {{title}}",
@@ -73,7 +74,11 @@
     "alreadyApplied": "Вы уже подавали заявку на эту стажировку",
     "error": "Ошибка при отправке заявки",
     "cancel": "Отмена",
-    "confirm": "Подтвердить"
+    "confirm": "Подтвердить",
+    "resumeFromProfile": "Будет использовано резюме из профиля",
+    "resumeView": "Просмотр",
+    "resumeNotFound": "Резюме не найдено. Сгенерируйте его в профиле.",
+    "resumeGoProfile": "Перейти в профиль →"
   },
   "applications": {
     "title": "Мои заявки",

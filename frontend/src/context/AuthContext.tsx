@@ -20,7 +20,7 @@ interface AuthContextValue extends AuthState {
     university?: string;
     major?: string;
     company?: string;
-  }) => Promise<{ email: string }>;
+  }) => Promise<{ email: string; autoVerified?: boolean }>;
   verifyEmail: (email: string, code: string) => Promise<void>;
   logout: () => void;
   hasRole: (role: UserRole) => boolean;

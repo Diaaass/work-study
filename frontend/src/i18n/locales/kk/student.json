@@ -53,7 +53,8 @@
     "backToSearch": "Іздеуге оралу",
     "error": "Қате",
     "notFound": "Тағылымдама табылмады",
-    "negotiable": "Келісім бойынша"
+    "negotiable": "Келісім бойынша",
+    "applicantsLabel": "Өтінімдер"
   },
   "apply": {
     "title": "{{title}} өтініш беру",
@@ -73,7 +74,11 @@
     "alreadyApplied": "Сіз бұл тағылымдамаға бұрын өтініш бергенсіз",
     "error": "Өтінішті жіберу қатесі",
     "cancel": "Болдырмау",
-    "confirm": "Растау"
+    "confirm": "Растау",
+    "resumeFromProfile": "Профильдегі резюме қолданылады",
+    "resumeView": "Қарау",
+    "resumeNotFound": "Резюме табылмады. Профильде жасаңыз.",
+    "resumeGoProfile": "Профильге өту →"
   },
   "applications": {
     "title": "Менің өтініштерім",

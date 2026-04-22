@@ -155,14 +155,12 @@ export default function InternshipDetailPage() {
           <div className={styles.sidebarRow}>
             <span className={styles.sidebarLabel}>{t('detail.deadline')}</span>
             <span className={styles.sidebarValue}>
-              {formatDate(internship.deadline)}
+              {internship.deadline ? formatDate(internship.deadline) : '—'}
             </span>
           </div>
           <div className={styles.sidebarRow}>
-            <span className={styles.sidebarLabel}>{t('detail.applicants')}</span>
-            <span className={styles.sidebarValue}>
-              {internship.applicantsCount}
-            </span>
+            <span className={styles.sidebarLabel}>{t('detail.applicantsLabel')}</span>
+            <span className={styles.sidebarValue}>{internship.applicantsCount ?? 0}</span>
           </div>
 
           <div className={styles.sidebarActions}>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { ClipboardList } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
 import { internshipsApi } from '@/api/internships';
 import { Button } from '@/components/ui/Button/Button';
@@ -130,7 +131,7 @@ export default function MyInternshipsPage() {
 
       {filteredInternships.length === 0 ? (
         <div className={styles.empty}>
-          <div className={styles.emptyIcon}>📋</div>
+          <div className={styles.emptyIcon}><ClipboardList size={40} /></div>
           <h3 className={styles.emptyTitle}>{t('internships.emptyTitle')}</h3>
           <p className={styles.emptyText}>{t('internships.emptyText')}</p>
           <Button onClick={() => navigate('/hr/post')}>
@@ -140,7 +141,6 @@ export default function MyInternshipsPage() {
       ) : (
         <div className={styles.list}>
           {filteredInternships.map((internship) => {
-            const applicantsCount = internship._count?.applications ?? 0;
             const isStatsOpen = statsId === internship.id;
 
             return (

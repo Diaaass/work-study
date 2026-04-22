@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Shield } from 'lucide-react';
 import { usersApi } from '@/api/users';
 import { useToast } from '@/hooks/useToast';
 import { Button } from '@/components/ui/Button/Button';
@@ -40,7 +41,7 @@ export default function ModerationPage() {
     try {
       await usersApi.moderateInternship(id, true, InternshipStatus.Published);
       setInternships((prev) => prev.filter((i) => i.id !== id));
-      showToast(t('moderation.approve') + ' ✓', 'success');
+      showToast(t('moderation.approve'), 'success');
     } catch (err) {
       showToast((err as ApiError).message || 'Error', 'error');
     } finally {
@@ -54,7 +55,7 @@ export default function ModerationPage() {
       const reason = rejectReasons[id]?.trim() || undefined;
       await usersApi.moderateInternship(id, false, InternshipStatus.Rejected, reason);
       setInternships((prev) => prev.filter((i) => i.id !== id));
-      showToast(t('moderation.reject') + ' ✓', 'info');
+      showToast(t('moderation.reject'), 'info');
     } catch (err) {
       showToast((err as ApiError).message || 'Error', 'error');
     } finally {
@@ -84,7 +85,7 @@ export default function ModerationPage() {
 
       {internships.length === 0 ? (
         <div className={styles.empty}>
-          <div className={styles.emptyIcon}>🛡️</div>
+          <div className={styles.emptyIcon}><Shield size={40} /></div>
           <p>{t('moderation.empty')}</p>
         </div>
       ) : (
@@ -94,19 +95,11 @@ export default function ModerationPage() {
               <div className={styles.cardHeader}>
                 <h2 className={styles.cardTitle}>{internship.title}</h2>
                 <div className={styles.cardMeta}>
-                  <span className={styles.cardMetaItem}>
-                    🏢 {internship.company}
-                  </span>
-                  <span className={styles.cardMetaItem}>
-                    📍 {internship.city}
-                  </span>
-                  <span className={styles.cardMetaItem}>
-                    📅 {formatDateShort(internship.createdAt)}
-                  </span>
+                  <span className={styles.cardMetaItem}>{internship.company}</span>
+                  <span className={styles.cardMetaItem}>{internship.city}</span>
+                  <span className={styles.cardMetaItem}>{formatDateShort(internship.createdAt)}</span>
                   {internship.salary && (
-                    <span className={styles.cardMetaItem}>
-                      💰 {internship.salary}
-                    </span>
+                    <span className={styles.cardMetaItem}>{internship.salary} ₸</span>
                   )}
                 </div>
               </div>

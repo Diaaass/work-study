@@ -78,7 +78,7 @@ export default function LoginPage() {
 
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
           {justRegistered && (
-            <div className={styles.successMessage}>✅ Аккаунт создан! Войдите в систему.</div>
+            <div className={styles.successMessage}>Аккаунт создан! Войдите в систему.</div>
           )}
           {passwordResetSuccess && (
             <div className={styles.successMessage}>Пароль изменён — войдите с новым паролем</div>

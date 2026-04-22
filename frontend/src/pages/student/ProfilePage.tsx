@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo, type FormEvent, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { User as UserIcon, GraduationCap, Briefcase, Wrench, Globe, FileText, Smartphone, Pencil, Eye } from 'lucide-react';
 import { pdf } from '@react-pdf/renderer';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
@@ -291,7 +292,7 @@ export default function ProfilePage() {
                 disabled={avatarUploading}
                 onClick={() => avatarInputRef.current?.click()}
               >
-                {avatarUploading ? '…' : '✎'}
+                {avatarUploading ? '…' : <Pencil size={14} />}
               </button>
               <input
                 ref={avatarInputRef}
@@ -311,7 +312,7 @@ export default function ProfilePage() {
                   ? <span className={styles.heroBadge}>HR</span>
                   : <span className={styles.heroBadge}>Student</span>
                 }
-                {isTgLinked && <span className={styles.heroBadge} style={{ background: '#f0fdf4', color: '#16a34a', borderColor: '#bbf7d0' }}>✓ Telegram</span>}
+                {isTgLinked && <span className={styles.heroBadge} style={{ background: 'var(--color-success-light)', color: 'var(--color-success)', borderColor: 'var(--color-success)' }}>Telegram</span>}
               </div>
             </div>
           </div>
@@ -343,7 +344,7 @@ export default function ProfilePage() {
         {/* ── Personal info ─────────────────────────────────────────── */}
         <Card className={styles.sectionCard}>
           <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>👤</span>
+            <span className={styles.sectionIcon}><UserIcon size={18} /></span>
             {t('profile.personalInfo')}
           </h2>
           <div className={styles.fieldGrid}>
@@ -370,7 +371,7 @@ export default function ProfilePage() {
         {!isHR && (
           <Card className={styles.sectionCard}>
             <h2 className={styles.sectionTitle}>
-              <span className={styles.sectionIcon}>🎓</span>
+              <span className={styles.sectionIcon}><GraduationCap size={18} /></span>
               {t('profile.academicInfo')}
             </h2>
             <div className={styles.fieldGrid}>
@@ -385,7 +386,7 @@ export default function ProfilePage() {
         <Card className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>
-              <span className={styles.sectionIcon}>💼</span>
+              <span className={styles.sectionIcon}><Briefcase size={18} /></span>
               {t('profile.expSection')}
             </h2>
             <button type="button" className={styles.addBtn} onClick={addExp}>
@@ -430,7 +431,7 @@ export default function ProfilePage() {
         {/* ── Skills ───────────────────────────────────────────────── */}
         <Card className={styles.sectionCard}>
           <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🛠</span>
+            <span className={styles.sectionIcon}><Wrench size={18} /></span>
             {t('profile.skills')}
           </h2>
           <div className={styles.skillsContainer}>
@@ -459,7 +460,7 @@ export default function ProfilePage() {
         <Card className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>
-              <span className={styles.sectionIcon}>🌐</span>
+              <span className={styles.sectionIcon}><Globe size={18} /></span>
               {t('profile.langSection')}
             </h2>
             <button type="button" className={styles.addBtn} onClick={addLang}>
@@ -501,7 +502,7 @@ export default function ProfilePage() {
       {!isHR && (
         <Card className={styles.sectionCard}>
           <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>📄</span>
+            <span className={styles.sectionIcon}><FileText size={18} /></span>
             {t('profile.cvSection')}
           </h2>
           <p className={styles.cvNote}>{t('profile.cvNote')}</p>
@@ -511,7 +512,7 @@ export default function ProfilePage() {
             </Button>
             {resumeUrl && (
               <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className={styles.cvPreviewLink}>
-                👁 {t('profile.cvPreview')}
+                <Eye size={14} /> {t('profile.cvPreview')}
               </a>
             )}
           </div>
@@ -521,7 +522,7 @@ export default function ProfilePage() {
       {/* ── Telegram ────────────────────────────────────────────────── */}
       <Card className={styles.sectionCard}>
         <h2 className={styles.sectionTitle}>
-          <span className={styles.sectionIcon}>📱</span>
+          <span className={styles.sectionIcon}><Smartphone size={18} /></span>
           {t('profile.tgTitle')}
         </h2>
         {isTgLinked ? (

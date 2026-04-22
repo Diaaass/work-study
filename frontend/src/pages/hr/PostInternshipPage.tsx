@@ -57,7 +57,7 @@ export default function PostInternshipPage() {
 
   const typeOptions = [
     { value: InternshipType.Remote, label: t('post.typeRemote') },
-    { value: InternshipType.Onsite, label: t('post.typeOnsite') },
+    { value: InternshipType.Office, label: t('post.typeOnsite') },
     { value: InternshipType.Hybrid, label: t('post.typeHybrid') },
   ];
 
@@ -133,11 +133,11 @@ export default function PostInternshipPage() {
         title: form.title.trim(),
         company: form.company.trim(),
         companyLogo: logoUrl || undefined,
-        location: form.location,
-        type: form.type,
+        city: form.location,
+        workType: form.type,
         description: form.description.trim(),
         duration: form.duration.trim(),
-        salary: form.salary.trim() || undefined,
+        salary: form.salary.trim() ? Number(form.salary.trim().replace(/[^\d.]/g, '')) || undefined : undefined,
         deadline: form.deadline,
         requirements: filteredRequirements,
         skills: form.skills,

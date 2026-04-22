@@ -9,8 +9,6 @@ let users = [...mockUsers];
 let internships = [...mockInternships];
 let applications = [...mockApplications];
 
-// Token state managed via localStorage in client.ts
-
 interface RequestOptions {
   method?: string;
   body?: unknown;
@@ -28,7 +26,6 @@ function getAuthUser(headers?: Record<string, string>): User {
     throwError(401, 'Unauthorized');
   }
   const token = authHeader.replace('Bearer ', '');
-  // In mock mode, token format is "mock-token-{userId}"
   const userId = token.replace('mock-token-', '');
   const user = users.find((u) => u.id === userId);
   if (!user) {
@@ -41,12 +38,11 @@ function parseBody<T>(body: unknown): T {
   return body as T;
 }
 
-// Populate applications with internship/student data
 function populateApplication(app: Application): Application {
   return {
     ...app,
-    internship: internships.find((i) => i.id === app.internshipId),
-    student: users.find((u) => u.id === app.studentId),
+    internship: internships.find((i) => i.id === String((app as unknown as Record<string, unknown>).internshipId)),
+    student: users.find((u) => u.id === String((app as unknown as Record<string, unknown>).studentId)),
   };
 }
 
@@ -86,8 +82,7 @@ export async function handleRequest<T>(
       createdAt: new Date().toISOString(),
     };
     users.push(newUser);
-    const token = `mock-token-${newUser.id}`;
-    return { token, user: newUser } as T;
+    return { email: newUser.email, autoVerified: true } as T;
   }
 
   if (endpoint === '/auth/me' && method === 'GET') {
@@ -98,15 +93,15 @@ export async function handleRequest<T>(
   // ===== INTERNSHIPS =====
   if (endpoint === '/internships' && method === 'GET') {
     const published = internships.filter(
-      (i) => i.status === InternshipStatus.Published && i.isApproved,
+      (i) => i.status === InternshipStatus.Published,
     );
     return published as T;
   }
 
   if (endpoint === '/internships/recommended' && method === 'GET') {
-    getAuthUser(headers); // verify auth
+    getAuthUser(headers);
     const published = internships
-      .filter((i) => i.status === InternshipStatus.Published && i.isApproved)
+      .filter((i) => i.status === InternshipStatus.Published)
       .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
     return published as T;
   }
@@ -114,7 +109,9 @@ export async function handleRequest<T>(
   if (endpoint === '/internships/my' && method === 'GET') {
     const user = getAuthUser(headers);
     if (user.role !== UserRole.HR) throwError(403, 'Доступ запрещён');
-    const myInternships = internships.filter((i) => i.postedBy === user.id);
+    const myInternships = internships.filter(
+      (i) => String((i as unknown as Record<string, unknown>).postedById) === user.id,
+    );
     return myInternships as T;
   }
 
@@ -129,32 +126,32 @@ export async function handleRequest<T>(
   if (endpoint === '/internships' && method === 'POST') {
     const user = getAuthUser(headers);
     if (user.role !== UserRole.HR) throwError(403, 'Доступ запрещён');
-    const data = parseBody<Partial<Internship>>(body);
-    const newInternship: Internship = {
+    const data = parseBody<Record<string, unknown>>(body);
+    const newInternship = {
       id: `i${internships.length + 1}`,
-      title: data.title || '',
-      company: user.company || '',
-      location: data.location || '',
-      type: data.type || 'onsite' as never,
-      description: data.description || '',
-      requirements: data.requirements || [],
-      skills: data.skills || [],
-      salary: data.salary,
-      duration: data.duration || '',
-      deadline: data.deadline || '',
-      postedBy: user.id,
-      status: InternshipStatus.Published,
-      isApproved: false, // needs admin approval
+      title: String(data.title || ''),
+      company: user.company || String(data.company || ''),
+      city: String(data.city || data.location || ''),
+      workType: String(data.workType || data.type || 'remote'),
+      description: String(data.description || ''),
+      requirements: (data.requirements as string[]) || [],
+      skills: (data.skills as string[]) || [],
+      salary: data.salary ? Number(data.salary) : undefined,
+      duration: String(data.duration || ''),
+      deadline: String(data.deadline || ''),
+      postedById: Number(user.id.replace('u', '')) || 0,
+      postedBy: { id: 0, name: user.name, email: user.email },
+      status: InternshipStatus.Pending,
       applicantsCount: 0,
       createdAt: new Date().toISOString(),
-    };
+    } as unknown as Internship;
     internships.push(newInternship);
     return newInternship as T;
   }
 
   const internshipUpdateMatch = endpoint.match(/^\/internships\/([^/]+)$/);
   if (internshipUpdateMatch && method === 'PUT') {
-    getAuthUser(headers); // verify auth
+    getAuthUser(headers);
     const id = internshipUpdateMatch[1];
     const idx = internships.findIndex((i) => i.id === id);
     if (idx === -1) throwError(404, 'Стажировка не найдена');
@@ -169,26 +166,26 @@ export async function handleRequest<T>(
     if (user.role !== UserRole.Student) throwError(403, 'Доступ запрещён');
     const data = parseBody<{ internshipId: string; coverLetter: string; resumeUrl: string }>(body);
 
-    // Check if already applied
     const existing = applications.find(
-      (a) => a.internshipId === data.internshipId && a.studentId === user.id,
+      (a) =>
+        String((a as unknown as Record<string, unknown>).internshipId) === String(data.internshipId) &&
+        String((a as unknown as Record<string, unknown>).studentId) === user.id,
     );
     if (existing) throwError(409, 'Вы уже подали заявку на эту стажировку');
 
-    const newApp: Application = {
+    const newApp = {
       id: `a${applications.length + 1}`,
       internshipId: data.internshipId,
       studentId: user.id,
       coverLetter: data.coverLetter,
       resumeUrl: data.resumeUrl,
       status: ApplicationStatus.Pending,
-      appliedAt: new Date().toISOString(),
-    };
+      createdAt: new Date().toISOString(),
+    } as unknown as Application;
     applications.push(newApp);
 
-    // Increment applicants count
-    const intIdx = internships.findIndex((i) => i.id === data.internshipId);
-    if (intIdx !== -1) internships[intIdx].applicantsCount++;
+    const intIdx = internships.findIndex((i) => i.id === String(data.internshipId));
+    if (intIdx !== -1) internships[intIdx].applicantsCount = (internships[intIdx].applicantsCount || 0) + 1;
 
     return populateApplication(newApp) as T;
   }
@@ -196,7 +193,7 @@ export async function handleRequest<T>(
   if (endpoint === '/applications/my' && method === 'GET') {
     const user = getAuthUser(headers);
     const myApps = applications
-      .filter((a) => a.studentId === user.id)
+      .filter((a) => String((a as unknown as Record<string, unknown>).studentId) === user.id)
       .map(populateApplication);
     return myApps as T;
   }
@@ -207,7 +204,7 @@ export async function handleRequest<T>(
     if (user.role !== UserRole.HR && user.role !== UserRole.Admin) throwError(403, 'Доступ запрещён');
     const internshipId = applicantsMatch[1];
     const apps = applications
-      .filter((a) => a.internshipId === internshipId)
+      .filter((a) => String((a as unknown as Record<string, unknown>).internshipId) === internshipId)
       .map(populateApplication);
     return apps as T;
   }
@@ -224,7 +221,7 @@ export async function handleRequest<T>(
       ...applications[idx],
       status: data.status,
       feedback: data.feedback,
-      reviewedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
     return populateApplication(applications[idx]) as T;
   }
@@ -261,7 +258,7 @@ export async function handleRequest<T>(
   if (endpoint === '/moderation/pending' && method === 'GET') {
     const user = getAuthUser(headers);
     if (user.role !== UserRole.Admin) throwError(403, 'Доступ запрещён');
-    const pending = internships.filter((i) => !i.isApproved);
+    const pending = internships.filter((i) => i.status === InternshipStatus.Pending);
     return pending as T;
   }
 
@@ -272,11 +269,11 @@ export async function handleRequest<T>(
     const id = moderationMatch[1];
     const idx = internships.findIndex((i) => i.id === id);
     if (idx === -1) throwError(404, 'Стажировка не найдена');
-    const data = parseBody<{ isApproved: boolean; status?: InternshipStatus }>(body);
+    const data = parseBody<{ approved: boolean; status?: InternshipStatus; rejectionReason?: string }>(body);
     internships[idx] = {
       ...internships[idx],
-      isApproved: data.isApproved,
-      status: data.status || (data.isApproved ? InternshipStatus.Published : InternshipStatus.Draft),
+      status: data.status || (data.approved ? InternshipStatus.Published : InternshipStatus.Rejected),
+      rejectionReason: data.rejectionReason,
     };
     return internships[idx] as T;
   }
