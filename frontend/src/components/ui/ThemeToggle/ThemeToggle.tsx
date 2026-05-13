@@ -13,11 +13,8 @@ export function ThemeToggle() {
       aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
       title={isDark ? 'Light mode' : 'Dark mode'}
     >
-      <span className={`${styles.icon} ${isDark ? styles.moon : styles.sun}`}>
-        {isDark ? <Moon size={14} /> : <Sun size={14} />}
-      </span>
-      <span className={`${styles.track} ${isDark ? styles.trackDark : styles.trackLight}`}>
-        <span className={`${styles.thumb} ${isDark ? styles.thumbRight : styles.thumbLeft}`} />
+      <span className={`${styles.iconWrap} ${isDark ? styles.dark : styles.light}`}>
+        {isDark ? <Sun size={18} strokeWidth={2} /> : <Moon size={18} strokeWidth={2} />}
       </span>
     </button>
   );

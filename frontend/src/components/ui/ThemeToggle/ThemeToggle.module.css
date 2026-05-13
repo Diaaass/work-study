@@ -1,51 +1,33 @@
 .toggle {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: none;
-  border: none;
-  padding: 4px 8px;
-  border-radius: var(--border-radius-full);
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  border-radius: var(--border-radius-md);
   cursor: pointer;
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .toggle:hover {
   background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
-.icon {
-  font-size: 16px;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
+.toggle:active {
+  transform: scale(0.94);
+}
+
+.iconWrap {
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.moon { transform: rotate(0deg); }
-.sun  { transform: rotate(180deg); }
-
-.track {
-  width: 40px;
-  height: 22px;
-  border-radius: var(--border-radius-full);
-  position: relative;
-  transition: background var(--transition-smooth);
-  flex-shrink: 0;
-}
-
-.trackDark  { background: var(--color-primary); }
-.trackLight { background: #d1d5db; }
-
-.thumb {
-  position: absolute;
-  top: 3px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: white;
-  transition: left var(--transition-smooth);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-}
-
-.thumbRight { left: 21px; }
-.thumbLeft  { left: 3px; }
+.dark { transform: rotate(0deg); }
+.light { transform: rotate(-20deg); }

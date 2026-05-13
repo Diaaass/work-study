@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Menu, User, LogOut, Zap } from 'lucide-react';
+import { Menu, User, LogOut, Zap, Search, PlusCircle, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { getInitials } from '@/utils/format';
 import { ThemeToggle } from '@/components/ui/ThemeToggle/ThemeToggle';
+import { NotificationsBell } from '@/components/ui/NotificationsBell/NotificationsBell';
 import styles from './Header.module.css';
 
 interface HeaderProps {
@@ -17,6 +18,14 @@ const ROLE_LABELS: Record<string, string> = {
   admin: 'Админ',
 };
 
+type CtaConfig = { label: string; to: string; Icon: typeof Search };
+
+const CTA_BY_ROLE: Record<string, CtaConfig> = {
+  student: { label: 'Найти стажировку', to: '/search', Icon: Search },
+  hr: { label: 'Опубликовать', to: '/hr/post', Icon: PlusCircle },
+  admin: { label: 'Модерация', to: '/admin/moderation', Icon: ShieldCheck },
+};
+
 export function Header({ onToggleSidebar }: HeaderProps) {
   const { t, i18n } = useTranslation();
   const { user, logout } = useAuth();
@@ -24,6 +33,8 @@ export function Header({ onToggleSidebar }: HeaderProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const languages = ['ru', 'en', 'kk'] as const;
+
+  const cta = useMemo(() => (user ? CTA_BY_ROLE[user.role] : null), [user]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -49,6 +60,15 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         </div>
 
         <div className={styles.right}>
+          {cta && (
+            <Link to={cta.to} className={styles.ctaBtn}>
+              <cta.Icon size={16} strokeWidth={2.25} />
+              <span className={styles.ctaLabel}>{cta.label}</span>
+            </Link>
+          )}
+
+          {user && <NotificationsBell />}
+
           <ThemeToggle />
 
           <div className={styles.langSwitcher}>

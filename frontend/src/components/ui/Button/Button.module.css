@@ -4,7 +4,7 @@
   justify-content: center;
   gap: var(--spacing-sm);
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--border-radius-md);
   font-family: var(--font-family);
   font-weight: 500;
   cursor: pointer;
