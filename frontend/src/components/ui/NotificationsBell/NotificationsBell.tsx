@@ -5,12 +5,12 @@ import { notificationsApi, type Notification } from '@/api/notifications';
 import styles from './NotificationsBell.module.css';
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
-  new_application:   <Briefcase size={14} />,
+  new_application:    <Briefcase size={14} />,
   application_status: <Star size={14} />,
-  moderation_result: <CheckCheck size={14} />,
-  support_reply:     <MessageSquare size={14} />,
-  new_ticket:        <FileText size={14} />,
-  new_internship:    <Megaphone size={14} />,
+  moderation_result:  <CheckCheck size={14} />,
+  support_reply:      <MessageSquare size={14} />,
+  new_ticket:         <FileText size={14} />,
+  new_internship:     <Megaphone size={14} />,
 };
 
 function timeAgo(dateStr: string): string {
@@ -25,11 +25,11 @@ function timeAgo(dateStr: string): string {
 
 export function NotificationsBell() {
   const navigate = useNavigate();
-  const [open, setOpen]             = useState(false);
-  const [items, setItems]           = useState<Notification[]>([]);
-  const [unread, setUnread]         = useState(0);
-  const [loading, setLoading]       = useState(false);
-  const dropRef                     = useRef<HTMLDivElement>(null);
+  const [open, setOpen]       = useState(false);
+  const [items, setItems]     = useState<Notification[]>([]);
+  const [unread, setUnread]   = useState(0);
+  const [loading, setLoading] = useState(false);
+  const dropRef               = useRef<HTMLDivElement>(null);
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -37,18 +37,16 @@ export function NotificationsBell() {
       setItems(data.items);
       setUnread(data.unreadCount);
     } catch {
-      // тихо — не ломаем UI
+      // silent — don't break UI
     }
   }, []);
 
-  // Первичная загрузка + polling каждые 30 сек
   useEffect(() => {
     fetchNotifications();
     const timer = setInterval(fetchNotifications, 30_000);
     return () => clearInterval(timer);
   }, [fetchNotifications]);
 
-  // Закрытие по клику вне дропдауна
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (dropRef.current && !dropRef.current.contains(e.target as Node)) {
@@ -58,8 +56,6 @@ export function NotificationsBell() {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
-
-  const handleOpen = () => setOpen(v => !v);
 
   const handleMarkAllRead = async () => {
     setLoading(true);
@@ -87,12 +83,12 @@ export function NotificationsBell() {
   return (
     <div className={styles.wrap} ref={dropRef}>
       <button
-        className={styles.bell}
-        onClick={handleOpen}
+        className={styles.bellBtn}
+        onClick={() => setOpen(v => !v)}
         aria-label="Уведомления"
         aria-expanded={open}
       >
-        <Bell size={18} />
+        <Bell size={18} strokeWidth={2} />
         {unread > 0 && (
           <span className={styles.badge}>{unread > 9 ? '9+' : unread}</span>
         )}
@@ -104,11 +100,11 @@ export function NotificationsBell() {
             <span className={styles.headerTitle}>Уведомления</span>
             {unread > 0 && (
               <button
-                className={styles.readAll}
+                className={styles.markRead}
                 onClick={handleMarkAllRead}
                 disabled={loading}
               >
-                <CheckCheck size={13} />
+                <CheckCheck size={14} />
                 Прочитать всё
               </button>
             )}
@@ -124,7 +120,7 @@ export function NotificationsBell() {
               items.map(n => (
                 <button
                   key={n.id}
-                  className={`${styles.item} ${n.isRead ? styles.itemRead : styles.itemUnread}`}
+                  className={`${styles.item} ${n.isRead ? '' : styles.unread}`}
                   onClick={() => handleClick(n)}
                 >
                   <span className={styles.itemIcon}>{TYPE_ICON[n.type] ?? <Bell size={14} />}</span>

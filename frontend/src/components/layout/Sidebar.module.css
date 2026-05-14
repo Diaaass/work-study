@@ -1,28 +1,76 @@
-/* ─── Sidebar shell ─────────────────────────────────────────────────────────── */
+/* ─── Sidebar shell (floating drawer) ─────────────────────────────────────── */
 .sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
   width: var(--sidebar-width);
+  height: calc(100vh - var(--header-height));
   background: var(--sidebar-bg);
   border-right: 1px solid var(--color-border);
-  height: calc(100vh - var(--header-height));
-  position: sticky;
-  top: var(--header-height);
-  flex-shrink: 0;
+  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.35);
   padding: var(--spacing-md) 0;
   overflow-y: auto;
-  transition: background var(--transition-smooth), border-color var(--transition-smooth);
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 90;
+  transform: translateX(-100%);
+  transition: transform 0.24s cubic-bezier(0.4, 0, 0.2, 1),
+              background var(--transition-smooth),
+              border-color var(--transition-smooth);
 }
 
-.overlay { display: none; }
+.sidebarOpen {
+  transform: translateX(0);
+}
 
-/* ─── Nav list ──────────────────────────────────────────────────────────────── */
+/* ─── Top row inside drawer ──────────────────────────────────────────────── */
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px var(--spacing-md) var(--spacing-sm);
+  margin-bottom: 4px;
+}
+
+.menuLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* ─── Nav list ──────────────────────────────────────────────────────────── */
 .nav {
   display: flex;
   flex-direction: column;
   gap: 2px;
   padding: 0 var(--spacing-sm);
+  flex: 1;
 }
 
-/* ─── Nav item ──────────────────────────────────────────────────────────────── */
+/* ─── Nav item ──────────────────────────────────────────────────────────── */
 .navItem {
   display: flex;
   align-items: center;
@@ -42,7 +90,6 @@
   color: var(--color-text-primary);
 }
 
-/* ─── Active pill ───────────────────────────────────────────────────────────── */
 .navItemActive {
   background: var(--color-primary);
   color: #fff;
@@ -54,7 +101,6 @@
   color: #fff;
 }
 
-/* ─── Icon ──────────────────────────────────────────────────────────────────── */
 .navIcon {
   display: flex;
   align-items: center;
@@ -65,15 +111,9 @@
   transition: opacity var(--transition-fast);
 }
 
-.navItem:hover .navIcon {
-  opacity: 0.75;
-}
+.navItem:hover .navIcon { opacity: 0.75; }
+.navItemActive .navIcon { opacity: 1; }
 
-.navItemActive .navIcon {
-  opacity: 1;
-}
-
-/* ─── Label ─────────────────────────────────────────────────────────────────── */
 .navLabel {
   flex: 1;
   white-space: nowrap;
@@ -81,37 +121,34 @@
   text-overflow: ellipsis;
 }
 
-/* ─── Mobile ────────────────────────────────────────────────────────────────── */
+/* ─── Overlay backdrop ───────────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 80;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.24s ease;
+}
+
+.overlayVisible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* On wide screens, dim less and keep content somewhat visible */
+@media (min-width: 1024px) {
+  .overlay { background: rgba(0, 0, 0, 0.25); }
+}
+
 @media (max-width: 767px) {
   .sidebar {
-    position: fixed;
+    width: min(86vw, 320px);
     top: 0;
-    left: 0;
     height: 100vh;
-    z-index: 150;
-    transform: translateX(-100%);
-    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     padding-top: calc(var(--header-height) + var(--spacing-md));
-  }
-
-  .sidebarOpen {
-    transform: translateX(0);
-  }
-
-  .overlay {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(2px);
-    z-index: 140;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.28s ease;
-  }
-
-  .overlayVisible {
-    opacity: 1;
-    pointer-events: auto;
   }
 }

@@ -21,30 +21,10 @@
   outline-offset: 2px;
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: var(--gradient-primary);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
 .card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-glow-purple);
-  border-color: transparent;
-}
-
-.card:hover::before {
-  opacity: 1;
+  border-color: var(--color-primary);
 }
 
 /* Apply button overlay */
@@ -185,8 +165,8 @@
 }
 
 .salary {
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
   color: var(--color-text-secondary);
   margin-left: auto;
 }
@@ -237,3 +217,14 @@
 [data-theme="light"] .hotBadge { color: #dc2626; }
 [data-theme="light"] .urgentBadge { color: #d97706; }
 [data-theme="light"] .applyOverlay { background: linear-gradient(to top, var(--color-surface) 80%, transparent); }
+
+/* Touch devices: Apply button always visible (no hover) */
+@media (hover: none) {
+  .applyOverlay {
+    position: static;
+    transform: none;
+    padding: 0;
+    background: none;
+    margin-top: var(--spacing-md);
+  }
+}

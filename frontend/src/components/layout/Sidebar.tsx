@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   HelpCircle,
   MessageSquare,
+  X,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import styles from './Sidebar.module.css';
@@ -73,8 +74,20 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       <div
         className={`${styles.overlay} ${isOpen ? styles.overlayVisible : ''}`}
         onClick={onClose}
+        aria-hidden="true"
       />
-      <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
+      <aside
+        className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}
+        aria-label="Main navigation"
+        aria-hidden={!isOpen}
+      >
+        <div className={styles.topRow}>
+          <span className={styles.menuLabel}>Меню</span>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close menu">
+            <X size={16} />
+          </button>
+        </div>
+
         <nav className={styles.nav}>
           {navItems.map((item) => {
             const Icon = item.icon;
