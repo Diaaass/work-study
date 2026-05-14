@@ -70,7 +70,6 @@ export function Header({ onToggleSidebar }: HeaderProps) {
           {user && <NotificationsBell />}
 
           <ThemeToggle />
-          <NotificationsBell />
 
           <div className={styles.langSwitcher}>
             {languages.map((lang) => (

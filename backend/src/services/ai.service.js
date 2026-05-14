@@ -96,27 +96,107 @@ ${profile}
 Требования: ${internship.requirements?.join(', ')}
 Навыки: ${internship.skills?.join(', ')}
 
-Требования к письму:
-- На русском языке
-- 3-4 абзаца, не более 250 слов
-- Профессиональный тон, конкретные примеры из профиля
-- Не начинай с "Я хочу", начни оригинально
-- Без шаблонных фраз типа "командный игрок"
-- Завершить призывом к действию
+Напиши профессиональное сопроводительное письмо на русском языке. Конкретные примеры из профиля, без воды и шаблонных фраз. Завершить призывом к интервью.
 
-Верни ТОЛЬКО текст письма, без заголовков и пояснений.`;
+Верни ТОЛЬКО текст письма.`;
 
   try {
     const result = await model.generateContent(prompt);
-    return result.response.text().trim();
+    const text = result.response.text().trim();
+    if (text.length <= 700) return text;
+    const truncated = text.slice(0, 700);
+    const lastDot = truncated.lastIndexOf('.');
+    return lastDot > 300 ? truncated.slice(0, lastDot + 1) : truncated.trimEnd();
   } catch (err) {
     console.error('[AI] Ошибка cover letter:', err.message);
     throw new Error('Не удалось сгенерировать письмо');
   }
 }
 
+// Smart search: Gemini расширяет запрос → код ищет по словоформам
+async function smartSearch(query, internships) {
+  // Шаг 1: Gemini генерирует все словоформы и синонимы запроса
+  const expandPrompt = `You expand search queries into all related word forms for text search.
+
+Query: "${query}"
+
+Return ONLY valid JSON (no markdown):
+{
+  "terms": ["word1", "word2", ...],
+  "city": null,
+  "workType": null
+}
+
+For "terms" — list EXACT words/phrases that might appear in job titles or skill lists:
+- Include Russian AND English word forms
+- Include all grammatical forms: маркетинг → [маркетинг, маркетолог, маркетолога, маркетинговый, marketing, marketer, smm, pr, реклама, рекламный]
+- финансы → [финансы, финансист, финансовый, аналитик, экономист, бухгалтер, finance, financial, analyst, banking, банк]
+- кибербезопасность → [кибербезопасность, безопасность, security, cybersecurity, soc, иб, penetration, защита]
+- разработка → [разработчик, разработка, developer, программист, engineer, frontend, backend, fullstack, devops, qa]
+- дизайн → [дизайнер, дизайн, designer, ui, ux, figma, графический]
+- Natural language: extract the TOPIC first, then expand it the same way
+  "брат хочу быть финансовым аналитиком" → topic is финансовый аналитик → expand accordingly
+  "хочу удалённую работу в IT" → topic is IT + set workType: remote
+
+For city (only these exact values or null): "Алматы", "Астана", "Удалённо"
+For workType (only these exact values or null): "remote", "office", "hybrid"
+
+Minimum 5 terms, maximum 20 terms.`;
+
+  let terms = [];
+  let city = null;
+  let workType = null;
+
+  try {
+    const result = await model.generateContent(expandPrompt);
+    const raw = result.response.text().trim();
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      terms = (parsed.terms || []).map(t => t.toLowerCase().trim()).filter(t => t.length >= 2);
+      city = parsed.city || null;
+      workType = parsed.workType || null;
+    }
+    console.log(`[AI] expanded "${query}" →`, terms);
+  } catch (err) {
+    console.error('[AI] expand error:', err.message);
+    // Fallback: сами берём слова из запроса
+    terms = query.toLowerCase().split(/\s+/).filter(w => w.length >= 3);
+  }
+
+  // Шаг 2: ищем каждый term через includes() в данных вакансии
+  const scored = internships
+    .map(i => {
+      if (city && i.city !== city) return null;
+      if (workType && i.workType !== workType) return null;
+
+      const titleLow = (i.title || '').toLowerCase();
+      const bodyLow = [
+        i.company,
+        i.description,
+        ...(Array.isArray(i.skills) ? i.skills : []),
+        ...(Array.isArray(i.requirements) ? i.requirements : []),
+      ].join(' ').toLowerCase();
+
+      let score = 0;
+      for (const term of terms) {
+        if (titleLow.includes(term))       score += 60;
+        else if (bodyLow.includes(term))   score += 25;
+      }
+
+      // Если только город/тип без terms — все подходят
+      if (terms.length === 0) return { id: i.id, score: 70 };
+      return score > 0 ? { id: i.id, score: Math.min(score, 100) } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.score - a.score);
+
+  console.log(`[AI] smartSearch "${query}": ${scored.length} results`);
+  return scored;
+}
+
 function invalidateCache(userId) {
   scoreCache.delete(userId);
 }
 
-module.exports = { scoreInternships, generateCoverLetter, invalidateCache };
+module.exports = { scoreInternships, generateCoverLetter, smartSearch, invalidateCache };

@@ -1,6 +1,9 @@
 {
   "dashboard": {
     "welcome": "Добро пожаловать, {{name}}!",
+    "heroBadge": "Work&Study",
+    "heroSubtitle": "Умная платформа для поиска стажировок с персональным AI-подбором",
+    "heroCta": "Заполните профиль для AI-рекомендаций",
     "recommendations": "AI-рекомендации",
     "recommendationsDesc": "Стажировки, подобранные для вас",
     "recentApplications": "Последние заявки",
@@ -35,7 +38,12 @@
     "typeRemote": "Удалённо",
     "typeOnsite": "В офисе",
     "typeHybrid": "Гибрид",
-    "tryDifferent": "Попробуйте изменить параметры поиска"
+    "tryDifferent": "Попробуйте изменить параметры поиска",
+    "aiSearchPlaceholder": "Опишите что ищете, например: хочу в маркетинг без опыта...",
+    "aiSearchBtn": "AI поиск",
+    "aiSearching": "AI ищет...",
+    "aiSearchResults": "AI нашёл {{count}} стажировок по вашему запросу",
+    "aiSearchEmpty": "AI не нашёл подходящих стажировок. Попробуйте другой запрос."
   },
   "detail": {
     "description": "Описание",

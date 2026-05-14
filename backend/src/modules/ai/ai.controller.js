@@ -1,5 +1,5 @@
 const prisma = require('../../config/db');
-const { scoreInternships, generateCoverLetter } = require('../../services/ai.service');
+const { scoreInternships, generateCoverLetter, smartSearch } = require('../../services/ai.service');
 
 // GET /api/v1/ai/recommendations
 const getRecommendations = async (req, res) => {
@@ -60,4 +60,41 @@ const getCoverLetter = async (req, res) => {
   }
 };
 
-module.exports = { getRecommendations, getCoverLetter };
+// POST /api/v1/ai/smart-search
+const getSmartSearch = async (req, res) => {
+  try {
+    const { query, city, workType } = req.body;
+    if (!query?.trim()) return res.status(400).json({ message: 'query обязателен' });
+
+    const where = { status: 'published' };
+    if (city && city !== 'all') where.city = { contains: city, mode: 'insensitive' };
+    if (workType && workType !== 'all') where.workType = workType;
+
+    const internships = await prisma.internship.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: 40,
+    });
+
+    if (!internships.length) return res.json([]);
+
+    const scored = await smartSearch(query, internships);
+    const scoreMap = new Map(scored.map(s => [s.id, s]));
+
+    const result = internships
+      .filter(i => scoreMap.has(i.id))
+      .map(i => ({
+        ...i,
+        matchScore: scoreMap.get(i.id).score,
+        matchReason: scoreMap.get(i.id).reason,
+      }))
+      .sort((a, b) => b.matchScore - a.matchScore);
+
+    res.json(result);
+  } catch (err) {
+    console.error('[AI] smart-search error:', err.message);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { getRecommendations, getCoverLetter, getSmartSearch };

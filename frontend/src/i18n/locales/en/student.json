@@ -1,6 +1,9 @@
 {
   "dashboard": {
     "welcome": "Welcome, {{name}}!",
+    "heroBadge": "Work&Study",
+    "heroSubtitle": "Smart internship platform with personalized AI matching",
+    "heroCta": "Complete your profile for AI recommendations",
     "recommendations": "AI Recommendations",
     "recommendationsDesc": "Internships matched to your profile",
     "recentApplications": "Recent Applications",
@@ -35,7 +38,12 @@
     "typeRemote": "Remote",
     "typeOnsite": "Onsite",
     "typeHybrid": "Hybrid",
-    "tryDifferent": "Try adjusting your search criteria"
+    "tryDifferent": "Try adjusting your search criteria",
+    "aiSearchPlaceholder": "Describe what you're looking for, e.g. want marketing with no experience...",
+    "aiSearchBtn": "AI Search",
+    "aiSearching": "AI searching...",
+    "aiSearchResults": "AI found {{count}} internships for your query",
+    "aiSearchEmpty": "AI found no matching internships. Try a different query."
   },
   "detail": {
     "description": "Description",

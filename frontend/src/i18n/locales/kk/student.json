@@ -1,6 +1,9 @@
 {
   "dashboard": {
     "welcome": "Қош келдіңіз, {{name}}!",
+    "heroBadge": "Work&Study",
+    "heroSubtitle": "Жеке AI таңдауы бар тағылымдама іздеу платформасы",
+    "heroCta": "AI-ұсыныстар үшін профильді толтырыңыз",
     "recommendations": "AI-ұсыныстар",
     "recommendationsDesc": "Сізге сәйкес тағылымдамалар",
     "recentApplications": "Соңғы өтініштер",
@@ -35,7 +38,12 @@
     "typeRemote": "Қашықтан",
     "typeOnsite": "Кеңседе",
     "typeHybrid": "Аралас",
-    "tryDifferent": "Іздеу параметрлерін өзгертіп көріңіз"
+    "tryDifferent": "Іздеу параметрлерін өзгертіп көріңіз",
+    "aiSearchPlaceholder": "Не іздейтініңізді сипаттаңыз, мысалы: тәжірибесіз маркетингке барғым келеді...",
+    "aiSearchBtn": "AI іздеу",
+    "aiSearching": "AI іздеуде...",
+    "aiSearchResults": "AI сұранысыңыз бойынша {{count}} тағылымдама тапты",
+    "aiSearchEmpty": "AI сәйкес тағылымдама таппады. Басқа сұраныс енгізіп көріңіз."
   },
   "detail": {
     "description": "Сипаттама",

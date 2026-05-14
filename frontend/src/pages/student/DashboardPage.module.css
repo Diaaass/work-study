@@ -5,14 +5,101 @@
   gap: var(--spacing-xl);
 }
 
-.welcome {
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-xl, 16px);
+  padding: 36px 40px;
+  overflow: hidden;
+  animation: fadeSlideUp 0.4s ease both;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 560px;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: rgba(232, 164, 74, 0.12);
+  border: 1px solid rgba(232, 164, 74, 0.25);
+  border-radius: 20px;
+  padding: 3px 10px;
+  width: fit-content;
+}
+
+.heroTitle {
   font-size: var(--font-size-2xl);
   font-weight: 700;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: fadeSlideUp 0.4s ease both;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.heroSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.heroCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 8px 16px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  width: fit-content;
+  transition: opacity var(--transition-fast);
+}
+.heroCta:hover { opacity: 0.88; }
+
+/* Декоративные шары */
+.heroDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.heroOrb1 {
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,164,74,0.18) 0%, transparent 70%);
+}
+.heroOrb2 {
+  position: absolute;
+  right: 80px;
+  bottom: -60px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196,120,58,0.12) 0%, transparent 70%);
 }
 
 .statsRow {
@@ -27,6 +114,14 @@
   font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sparklesIcon {
+  color: var(--color-primary);
+  flex-shrink: 0;
 }
 
 .grid {

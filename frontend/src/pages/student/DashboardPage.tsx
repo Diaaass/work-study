@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Clock, CheckCircle, LayoutList } from 'lucide-react';
+import { Clock, CheckCircle, LayoutList, Sparkles, ArrowRight, Zap } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { internshipsApi } from '@/api/internships';
 import { applicationsApi } from '@/api/applications';
+import { aiApi } from '@/api/ai';
 import { Badge, getStatusVariant } from '@/components/ui/Badge/Badge';
 import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
 import { InternshipCard } from '@/components/ui/InternshipCard/InternshipCard';
@@ -32,6 +33,19 @@ export default function DashboardPage() {
         ]);
         setInternships(recData);
         setApplications(appData);
+
+        // Фоново подгружаем AI-скоры и вливаем в список
+        aiApi.getRecommendations()
+          .then((scored) => {
+            const scoreMap = new Map(scored.map(i => [i.id, { matchScore: i.matchScore, matchReason: i.matchReason }]));
+            setInternships(prev =>
+              prev.map(i => {
+                const ai = scoreMap.get(i.id);
+                return ai ? { ...i, ...ai } : i;
+              })
+            );
+          })
+          .catch(() => {});
       } catch {
         // silent
       } finally {
@@ -76,11 +90,36 @@ export default function DashboardPage() {
     );
   }
 
+  const profileComplete = !!(user?.skills?.length && user?.major && user?.university);
+
   return (
     <div className={styles.page}>
-      <h1 className={styles.welcome}>
-        {t('dashboard.welcome', { name: user?.name })}
-      </h1>
+      {/* Hero */}
+      <div className={styles.hero}>
+        <div className={styles.heroContent}>
+          <div className={styles.heroBadge}>
+            <Zap size={12} />
+            <span>{t('dashboard.heroBadge')}</span>
+          </div>
+          <h1 className={styles.heroTitle}>
+            {t('dashboard.welcome', { name: user?.name?.split(' ')[0] })}
+          </h1>
+          <p className={styles.heroSubtitle}>
+            {t('dashboard.heroSubtitle')}
+          </p>
+          {!profileComplete && (
+            <button className={styles.heroCta} onClick={() => navigate('/profile')}>
+              <Sparkles size={14} />
+              {t('dashboard.heroCta')}
+              <ArrowRight size={14} />
+            </button>
+          )}
+        </div>
+        <div className={styles.heroDecor} aria-hidden>
+          <div className={styles.heroOrb1} />
+          <div className={styles.heroOrb2} />
+        </div>
+      </div>
 
       <div className={styles.statsRow}>
         <StatCard value={pendingCount}  label={t('dashboard.pending')}   icon={<Clock size={20} />}        color="cyan"   max={totalCount || 1} />
@@ -89,12 +128,15 @@ export default function DashboardPage() {
       </div>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{t('dashboard.recommendations')}</h2>
+        <h2 className={styles.sectionTitle}>
+          <Sparkles size={16} className={styles.sparklesIcon} />
+          {t('dashboard.recommendations')}
+        </h2>
         {sortedInternships.length === 0 ? (
           <p className={styles.emptyText}>{t('dashboard.noRecommendations')}</p>
         ) : (
           <div className={styles.grid}>
-            {sortedInternships.slice(0, 6).map((internship, i) => (
+            {sortedInternships.slice(0, 3).map((internship, i) => (
               <InternshipCard key={internship.id} internship={internship} index={i} />
             ))}
           </div>

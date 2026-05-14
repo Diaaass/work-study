@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Sparkles } from 'lucide-react';
 import { internshipsApi } from '@/api/internships';
@@ -9,19 +9,31 @@ import { InternshipCard } from '@/components/ui/InternshipCard/InternshipCard';
 import type { Internship } from '@/types/models';
 import styles from './SearchPage.module.css';
 
+// Нечёткий поиск: если 4 буквы подряд из запроса есть в тексте — совпадение
+function fuzzyMatch(text: string, query: string): boolean {
+  const t = text.toLowerCase();
+  const q = query.toLowerCase().trim();
+  if (!q) return true;
+  // Каждое слово запроса проверяем отдельно
+  return q.split(/\s+/).every(word => {
+    if (word.length < 4) return t.includes(word); // короткие слова — точное вхождение
+    // Скользящее окно по 4 буквы
+    for (let i = 0; i <= word.length - 4; i++) {
+      if (t.includes(word.slice(i, i + 4))) return true;
+    }
+    return false;
+  });
+}
+
 export default function SearchPage() {
   const { t } = useTranslation('student');
   const { user } = useAuth();
 
   const [allInternships, setAllInternships] = useState<Internship[]>([]);
   const [loading, setLoading] = useState(true);
-  const [aiLoading, setAiLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
   const [locationFilter, setLocationFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
-  const [showRecommended, setShowRecommended] = useState(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     internshipsApi.getAll()
@@ -30,10 +42,9 @@ export default function SearchPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Фоново загружаем AI-скоры и вливаем в список
+  // AI скоры профиля — фоново, автоматически
   useEffect(() => {
     if (loading || user?.role !== 'student') return;
-    setAiLoading(true);
     aiApi.getRecommendations()
       .then((scored) => {
         const scoreMap = new Map(scored.map(i => [i.id, { matchScore: i.matchScore, matchReason: i.matchReason }]));
@@ -44,61 +55,47 @@ export default function SearchPage() {
           })
         );
       })
-      .catch(() => {})
-      .finally(() => setAiLoading(false));
+      .catch(() => {});
   }, [loading, user?.role]);
 
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchInput(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => setSearchQuery(value), 300);
-  }, []);
-
-  useEffect(() => () => { if (debounceRef.current) clearTimeout(debounceRef.current); }, []);
-
-  const filtered = allInternships.filter((internship) => {
-    const query = searchQuery.toLowerCase().trim();
-    if (query) {
-      const matches =
-        internship.title.toLowerCase().includes(query) ||
-        internship.company.toLowerCase().includes(query) ||
-        internship.skills.some((s) => s.toLowerCase().includes(query));
-      if (!matches) return false;
+  const filtered = allInternships.filter((i) => {
+    const q = searchInput.trim();
+    if (q) {
+      const searchableText = [i.title, i.company, ...(i.skills ?? [])].join(' ');
+      if (!fuzzyMatch(searchableText, q)) return false;
     }
-    if (locationFilter !== 'all' && internship.city.toLowerCase() !== locationFilter.toLowerCase()) return false;
-    if (typeFilter !== 'all' && internship.workType !== typeFilter) return false;
+    if (locationFilter !== 'all' && i.city?.toLowerCase() !== locationFilter.toLowerCase()) return false;
+    if (typeFilter !== 'all' && i.workType !== typeFilter) return false;
     return true;
   });
 
-  const sorted = showRecommended
-    ? [...filtered].sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0))
-    : filtered;
+  const sorted = [...filtered].sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0));
 
   const topRecommended = allInternships
     .filter(i => (i.matchScore ?? 0) >= 70)
     .sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0))
     .slice(0, 3);
 
-  const hasScores = allInternships.some(i => i.matchScore != null);
+  const hasQuery = searchInput.trim().length > 0;
 
   return (
     <div className={styles.page}>
-      {/* Search bar */}
       <div className={styles.searchBar}>
         <div className={styles.searchInputWrapper}>
-          <span className={styles.searchIcon}><Search size={16} /></span>
+          <span className={styles.searchIcon}>
+            <Search size={16} />
+          </span>
           <input
             className={styles.searchInput}
             type="text"
             placeholder={t('search.placeholder')}
             value={searchInput}
-            onChange={(e) => handleSearchChange(e.target.value)}
+            onChange={(e) => setSearchInput(e.target.value)}
             disabled={loading}
           />
         </div>
       </div>
 
-      {/* Filters */}
       <div className={styles.filters}>
         <div className={styles.filterGroup}>
           <label className={styles.filterLabel}>{t('search.location')}</label>
@@ -118,21 +115,9 @@ export default function SearchPage() {
             <option value="hybrid">{t('search.typeHybrid')}</option>
           </select>
         </div>
-        {user?.role === 'student' && (
-          <button
-            className={`${styles.aiToggle} ${showRecommended ? styles.aiToggleActive : ''}`}
-            onClick={() => setShowRecommended(v => !v)}
-            disabled={aiLoading || !hasScores}
-            title="Сортировать по совпадению с профилем"
-          >
-            <Sparkles size={14} />
-            {aiLoading ? 'AI анализирует...' : 'AI подбор'}
-          </button>
-        )}
       </div>
 
-      {/* Top recommendations block */}
-      {!loading && hasScores && topRecommended.length > 0 && !searchQuery && locationFilter === 'all' && typeFilter === 'all' && (
+      {!hasQuery && !loading && topRecommended.length > 0 && locationFilter === 'all' && typeFilter === 'all' && (
         <div className={styles.recommendedSection}>
           <div className={styles.recommendedHeader}>
             <Sparkles size={15} />
@@ -154,7 +139,7 @@ export default function SearchPage() {
         </div>
       ) : (
         <>
-          <p className={styles.resultsCount}>{t('search.results', { count: filtered.length })}</p>
+          <p className={styles.resultsCount}>{t('search.results', { count: sorted.length })}</p>
           {sorted.length === 0 ? (
             <div className={styles.empty}>
               <p className={styles.emptyTitle}>{t('search.noResults')}</p>
