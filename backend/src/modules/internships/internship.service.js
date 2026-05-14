@@ -1,4 +1,5 @@
 const prisma = require('../../config/db');
+const { create: notify } = require('../notifications/notification.service');
 
 // Фронт шлёт 'onsite', бэк хранит 'office'
 const mapWorkType = (type) => {
@@ -8,7 +9,7 @@ const mapWorkType = (type) => {
 };
 
 const create = async (data, userId) => {
-  return prisma.internship.create({
+  const internship = await prisma.internship.create({
     data: {
       title: data.title,
       company: data.company || '',
@@ -24,6 +25,17 @@ const create = async (data, userId) => {
       postedById: parseInt(userId),
     },
   });
+
+  // Уведомить всех администраторов — новая стажировка на модерацию
+  const admins = await prisma.user.findMany({ where: { role: 'admin' }, select: { id: true } });
+  await Promise.all(admins.map(a => notify(a.id, {
+    type: 'new_internship',
+    title: 'Новая стажировка на модерацию',
+    body: `«${internship.title}» от компании ${internship.company}`,
+    link: '/admin/moderation',
+  })));
+
+  return internship;
 };
 
 const getAll = async ({ search, city, workType, status, skills }) => {
@@ -185,13 +197,26 @@ const remove = async (id, userId, userRole) => {
 const moderate = async (id, status, rejectionReason) => {
   const internship = await prisma.internship.findUnique({ where: { id: parseInt(id) } });
   if (!internship) throw new Error('Стажировка не найдена');
-  return prisma.internship.update({
+
+  const updated = await prisma.internship.update({
     where: { id: parseInt(id) },
     data: {
       status,
       rejectionReason: status === 'rejected' ? (rejectionReason || null) : null
     }
   });
+
+  // Уведомление HR — результат модерации
+  const emoji = status === 'published' ? '✅' : '❌';
+  const label = status === 'published' ? 'одобрена' : 'отклонена';
+  await notify(internship.postedById, {
+    type: 'moderation_result',
+    title: `Стажировка ${label}`,
+    body: `${emoji} «${internship.title}» была ${label} администратором`,
+    link: '/hr/internships',
+  });
+
+  return updated;
 };
 
 module.exports = { create, getAll, getById, getMyInternships, getStats, update, updateStatus, moderate, remove };

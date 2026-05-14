@@ -1,0 +1,199 @@
+.wrap {
+  position: relative;
+}
+
+/* ── Кнопка колокольчика ──────────────────────────────────────────────────── */
+.bell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.bell:hover {
+  background: var(--color-surface-2, var(--color-border));
+  color: var(--color-text-primary);
+}
+
+/* ── Badge с числом непрочитанных ────────────────────────────────────────── */
+.badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ── Dropdown ─────────────────────────────────────────────────────────────── */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 340px;
+  max-height: 480px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg, 0 8px 32px rgba(0,0,0,.15));
+  overflow: hidden;
+  z-index: 200;
+  animation: dropIn 0.15s ease;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Шапка ────────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.headerTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.readAll {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+  opacity: 0.85;
+  transition: opacity var(--transition-fast);
+}
+.readAll:hover { opacity: 1; }
+.readAll:disabled { opacity: 0.4; cursor: default; }
+
+/* ── Список уведомлений ───────────────────────────────────────────────────── */
+.list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px 20px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+.emptyIcon { opacity: 0.3; }
+
+/* ── Элемент уведомления ─────────────────────────────────────────────────── */
+.item {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition-fast);
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+.item:last-child { border-bottom: none; }
+.item:hover { background: var(--color-surface-2, rgba(0,0,0,.03)); }
+
+.itemUnread { background: var(--color-primary-light, rgba(209,130,40,.07)); }
+.itemUnread:hover { background: var(--color-primary-light, rgba(209,130,40,.12)); }
+
+/* Иконка типа */
+.itemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-border);
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Контент */
+.itemContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.itemTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.itemBody {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.itemTime {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* Точка непрочитанного */
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+@media (max-width: 480px) {
+  .dropdown {
+    width: calc(100vw - 24px);
+    right: -8px;
+  }
+}

@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search } from 'lucide-react';
+import { Search, Sparkles } from 'lucide-react';
 import { internshipsApi } from '@/api/internships';
+import { aiApi } from '@/api/ai';
+import { useAuth } from '@/hooks/useAuth';
 import { CardSkeleton } from '@/components/ui/Skeleton/Skeleton';
 import { InternshipCard } from '@/components/ui/InternshipCard/InternshipCard';
 import type { Internship } from '@/types/models';
@@ -9,13 +11,16 @@ import styles from './SearchPage.module.css';
 
 export default function SearchPage() {
   const { t } = useTranslation('student');
+  const { user } = useAuth();
 
   const [allInternships, setAllInternships] = useState<Internship[]>([]);
   const [loading, setLoading] = useState(true);
+  const [aiLoading, setAiLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [locationFilter, setLocationFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [showRecommended, setShowRecommended] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -24,6 +29,24 @@ export default function SearchPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  // Фоново загружаем AI-скоры и вливаем в список
+  useEffect(() => {
+    if (loading || user?.role !== 'student') return;
+    setAiLoading(true);
+    aiApi.getRecommendations()
+      .then((scored) => {
+        const scoreMap = new Map(scored.map(i => [i.id, { matchScore: i.matchScore, matchReason: i.matchReason }]));
+        setAllInternships(prev =>
+          prev.map(i => {
+            const ai = scoreMap.get(i.id);
+            return ai ? { ...i, ...ai } : i;
+          })
+        );
+      })
+      .catch(() => {})
+      .finally(() => setAiLoading(false));
+  }, [loading, user?.role]);
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchInput(value);
@@ -46,6 +69,17 @@ export default function SearchPage() {
     if (typeFilter !== 'all' && internship.workType !== typeFilter) return false;
     return true;
   });
+
+  const sorted = showRecommended
+    ? [...filtered].sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0))
+    : filtered;
+
+  const topRecommended = allInternships
+    .filter(i => (i.matchScore ?? 0) >= 70)
+    .sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0))
+    .slice(0, 3);
+
+  const hasScores = allInternships.some(i => i.matchScore != null);
 
   return (
     <div className={styles.page}>
@@ -84,7 +118,33 @@ export default function SearchPage() {
             <option value="hybrid">{t('search.typeHybrid')}</option>
           </select>
         </div>
+        {user?.role === 'student' && (
+          <button
+            className={`${styles.aiToggle} ${showRecommended ? styles.aiToggleActive : ''}`}
+            onClick={() => setShowRecommended(v => !v)}
+            disabled={aiLoading || !hasScores}
+            title="Сортировать по совпадению с профилем"
+          >
+            <Sparkles size={14} />
+            {aiLoading ? 'AI анализирует...' : 'AI подбор'}
+          </button>
+        )}
       </div>
+
+      {/* Top recommendations block */}
+      {!loading && hasScores && topRecommended.length > 0 && !searchQuery && locationFilter === 'all' && typeFilter === 'all' && (
+        <div className={styles.recommendedSection}>
+          <div className={styles.recommendedHeader}>
+            <Sparkles size={15} />
+            <span>Рекомендовано для вас</span>
+          </div>
+          <div className={styles.recommendedGrid}>
+            {topRecommended.map((internship, i) => (
+              <InternshipCard key={internship.id} internship={internship} index={i} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <div className={styles.grid}>
@@ -95,14 +155,14 @@ export default function SearchPage() {
       ) : (
         <>
           <p className={styles.resultsCount}>{t('search.results', { count: filtered.length })}</p>
-          {filtered.length === 0 ? (
+          {sorted.length === 0 ? (
             <div className={styles.empty}>
               <p className={styles.emptyTitle}>{t('search.noResults')}</p>
               <p className={styles.emptyText}>{t('search.tryDifferent')}</p>
             </div>
           ) : (
             <div className={styles.grid}>
-              {filtered.map((internship, i) => (
+              {sorted.map((internship, i) => (
                 <InternshipCard key={internship.id} internship={internship} index={i} />
               ))}
             </div>

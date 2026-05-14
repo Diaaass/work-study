@@ -1,15 +1,19 @@
-const cloudinary = require('cloudinary').v2;
+let _cloudinary = null;
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key:    process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+function getCloudinary() {
+  if (!_cloudinary) {
+    _cloudinary = require('cloudinary').v2;
+    _cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key:    process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+  }
+  return _cloudinary;
+}
 
-/**
- * Загружает Buffer в Cloudinary и возвращает secure_url
- */
 const uploadBuffer = (buffer, options) => {
+  const cloudinary = getCloudinary();
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
       if (error) reject(error);
@@ -33,7 +37,7 @@ const uploadResume = (buffer, userId) =>
     folder:        'workstudy/resumes',
     public_id:     `resume_${userId}`,
     overwrite:     true,
-    resource_type: 'raw', // PDF
+    resource_type: 'raw',
   });
 
 const uploadLogo = (buffer, identifier) =>

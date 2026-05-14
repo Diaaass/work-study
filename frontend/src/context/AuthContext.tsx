@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       university?: string;
       major?: string;
       company?: string;
-    }) => {
+    }): Promise<{ email: string; autoVerified?: boolean }> => {
       return authApi.register(data);
     },
     [],

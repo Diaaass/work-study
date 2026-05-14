@@ -2,14 +2,16 @@ const express = require('express');
 const cors = require('cors');
 
 // Init Telegram bot (polling starts on require)
-require('./services/telegram.service');
+if (process.env.TELEGRAM_BOT_TOKEN) require('./services/telegram.service');
 
 const authRoutes = require('./modules/auth/auth.routes');
 const internshipRoutes = require('./modules/internships/internship.routes');
 const applicationRoutes = require('./modules/applications/application.routes');
 const userRoutes = require('./modules/users/user.routes');
 const uploadRoutes  = require('./modules/upload/upload.routes');
-const supportRoutes = require('./modules/support/support.routes');
+const supportRoutes       = require('./modules/support/support.routes');
+const notificationRoutes  = require('./modules/notifications/notification.routes');
+const aiRoutes            = require('./modules/ai/ai.routes');
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use('/api/v1/internships', internshipRoutes);
 app.use('/api/v1/applications', applicationRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/upload',  uploadRoutes);
-app.use('/api/v1/support', supportRoutes);
+app.use('/api/v1/support',        supportRoutes);
+app.use('/api/v1/notifications',  notificationRoutes);
+app.use('/api/v1/ai',             aiRoutes);
 
 module.exports = app;

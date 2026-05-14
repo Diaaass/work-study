@@ -5,6 +5,7 @@ import { Menu, User, LogOut, Zap } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { getInitials } from '@/utils/format';
 import { ThemeToggle } from '@/components/ui/ThemeToggle/ThemeToggle';
+import { NotificationsBell } from '@/components/ui/NotificationsBell/NotificationsBell';
 import styles from './Header.module.css';
 
 interface HeaderProps {
@@ -50,6 +51,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
 
         <div className={styles.right}>
           <ThemeToggle />
+          <NotificationsBell />
 
           <div className={styles.langSwitcher}>
             {languages.map((lang) => (

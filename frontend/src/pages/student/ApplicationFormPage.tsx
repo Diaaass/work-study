@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FileText, ExternalLink, AlertCircle } from 'lucide-react';
+import { FileText, ExternalLink, AlertCircle, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import { internshipsApi } from '@/api/internships';
 import { applicationsApi } from '@/api/applications';
+import { aiApi } from '@/api/ai';
 import { Card } from '@/components/ui/Card/Card';
 import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/Input/Input';
@@ -30,6 +31,7 @@ export default function ApplicationFormPage() {
 
   const [coverLetter, setCoverLetter] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [generatingLetter, setGeneratingLetter] = useState(false);
 
   const resumeUrl = user?.resumeUrl ?? '';
 
@@ -49,6 +51,21 @@ export default function ApplicationFormPage() {
     };
     fetchData();
   }, [id, t, showToast, navigate]);
+
+  const handleGenerateLetter = async () => {
+    if (!id) return;
+    setGeneratingLetter(true);
+    try {
+      const { text } = await aiApi.getCoverLetter(parseInt(id));
+      setCoverLetter(text);
+      setErrors(prev => ({ ...prev, coverLetter: '' }));
+      showToast('Письмо сгенерировано! Можете отредактировать.', 'success');
+    } catch {
+      showToast('Не удалось сгенерировать письмо', 'error');
+    } finally {
+      setGeneratingLetter(false);
+    }
+  };
 
   const validate = (): boolean => {
     const errs: Record<string, string> = {};
@@ -128,9 +145,20 @@ export default function ApplicationFormPage() {
         noValidate
       >
         <div className={styles.fieldGroup}>
+          <div className={styles.coverLetterHeader}>
+            <span className={styles.coverLetterLabel}>{t('apply.coverLetter')}</span>
+            <button
+              type="button"
+              className={styles.aiGenerateBtn}
+              onClick={handleGenerateLetter}
+              disabled={generatingLetter}
+            >
+              <Sparkles size={13} />
+              {generatingLetter ? 'Генерирую...' : 'Написать с AI'}
+            </button>
+          </div>
           <Input
             as="textarea"
-            label={t('apply.coverLetter')}
             value={coverLetter}
             onChange={(e) => setCoverLetter(e.target.value)}
             error={errors.coverLetter}

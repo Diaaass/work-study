@@ -67,9 +67,25 @@ model User {
   // Только HR
   company        String?
 
-  internships  Internship[]
-  applications Application[]
-  tickets      SupportTicket[]
+  internships    Internship[]
+  applications   Application[]
+  tickets        SupportTicket[]
+  notifications  Notification[]
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      String   // new_application | application_status | moderation_result | support_reply | new_ticket | new_internship
+  title     String
+  body      String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, isRead])
 }
 
 model SupportTicket {

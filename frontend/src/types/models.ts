@@ -60,6 +60,7 @@ export interface Internship {
   viewsCount?: number;
   applicantsCount?: number;
   matchScore?: number;      // вычисляемое, нет в БД
+  matchReason?: string;     // объяснение от AI
   postedById?: number;
   postedBy?: { id: number; name: string; email: string };
   _count?: { applications: number };

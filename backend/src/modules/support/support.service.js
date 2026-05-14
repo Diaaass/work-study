@@ -1,6 +1,7 @@
 const prisma = require('../../config/db');
 const { sendSupportNotification, sendAdminReply } = require('../../services/email.service');
 const { sendMessage } = require('../../services/telegram.service');
+const { create: notify } = require('../notifications/notification.service');
 
 const create = async ({ subject, message }, userId) => {
   const user = await prisma.user.findUnique({ where: { id: parseInt(userId) } });
@@ -23,11 +24,17 @@ const create = async ({ subject, message }, userId) => {
     );
   }
 
+  // Уведомление всем администраторам в системе
+  const admins = await prisma.user.findMany({ where: { role: 'admin' }, select: { id: true, telegramId: true } });
+  await Promise.all(admins.map(a => notify(a.id, {
+    type: 'new_ticket',
+    title: 'Новый тикет поддержки',
+    body: `От ${ticket.user.name}: ${ticket.subject}`,
+    link: '/admin/support',
+  })));
+
   // Telegram-уведомление администратору (если у него привязан аккаунт)
-  const admin = await prisma.user.findFirst({
-    where: { role: 'admin', telegramId: { not: null } },
-    select: { telegramId: true },
-  });
+  const admin = admins.find(a => a.telegramId);
   if (admin?.telegramId) {
     const roleLabel = { student: 'Студент', hr: 'HR', admin: 'Админ' }[ticket.user.role] || ticket.user.role;
     await sendMessage(
@@ -75,6 +82,16 @@ const reply = async (id, { adminReply, status }) => {
   if (adminReply?.trim()) {
     await sendAdminReply(ticket.user.email, ticket.user.name, ticket.subject, adminReply.trim())
       .catch(err => console.error('[Support] Ошибка email-ответа:', err.message));
+  }
+
+  // Уведомление пользователю в системе
+  if (adminReply?.trim()) {
+    await notify(ticket.userId, {
+      type: 'support_reply',
+      title: 'Ответ на ваш тикет',
+      body: `Администратор ответил на тему «${ticket.subject}»`,
+      link: '/support',
+    });
   }
 
   // Telegram-уведомление пользователю

@@ -1,5 +1,6 @@
 const prisma = require('../../config/db');
 const { sendMessage } = require('../../services/telegram.service');
+const { create: notify } = require('../notifications/notification.service');
 
 const apply = async ({ internshipId, coverLetter, resumeUrl }, userId) => {
   const internship = await prisma.internship.findUnique({
@@ -23,7 +24,7 @@ const apply = async ({ internshipId, coverLetter, resumeUrl }, userId) => {
   });
   if (activeCount >= 5) throw new Error('Максимум 5 активных заявок');
 
-  return prisma.application.create({
+  const application = await prisma.application.create({
     data: {
       studentId: parseInt(userId),
       internshipId: parseInt(internshipId),
@@ -31,6 +32,16 @@ const apply = async ({ internshipId, coverLetter, resumeUrl }, userId) => {
       resumeUrl: resumeUrl || null,
     }
   });
+
+  // Уведомление HR — новая заявка
+  await notify(internship.postedById, {
+    type: 'new_application',
+    title: 'Новая заявка',
+    body: `На стажировку «${internship.title}» подал заявку новый кандидат`,
+    link: `/hr/internships/${internshipId}/applicants`,
+  });
+
+  return application;
 };
 
 const getMyApplications = async (userId) => {
@@ -86,6 +97,18 @@ const updateStatus = async (id, { status, feedback }, userId) => {
     where: { id: parseInt(id) },
     data: { status, feedback },
   });
+
+  // Уведомление студенту в системе
+  if (status === 'accepted' || status === 'rejected') {
+    const emoji = status === 'accepted' ? '✅' : '❌';
+    const label = status === 'accepted' ? 'принята' : 'отклонена';
+    await notify(application.studentId, {
+      type: 'application_status',
+      title: `Заявка ${label}`,
+      body: `${emoji} Ваша заявка на «${application.internship.title}» ${label}`,
+      link: '/my-applications',
+    });
+  }
 
   // Уведомление студенту в Telegram при изменении статуса
   if ((status === 'accepted' || status === 'rejected') && application.student?.telegramId) {
