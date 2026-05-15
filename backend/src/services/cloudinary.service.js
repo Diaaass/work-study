@@ -11,6 +11,7 @@ function getCloudinary() {
   }
   return _cloudinary;
 }
+//чтобы не повторять код, создаем универсальную функцию для загрузки буфера с разными опциями
 
 const uploadBuffer = (buffer, options) => {
   const cloudinary = getCloudinary();
