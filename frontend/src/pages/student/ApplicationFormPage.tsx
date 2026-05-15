@@ -15,7 +15,7 @@ import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
 import type { Internship, ApiError } from '@/types/models';
 import styles from './ApplicationFormPage.module.css';
 
-const MAX_COVER_LETTER = 1000;
+const MAX_COVER_LETTER = 2000;
 
 export default function ApplicationFormPage() {
   const { t } = useTranslation('student');
@@ -163,7 +163,7 @@ export default function ApplicationFormPage() {
             onChange={(e) => setCoverLetter(e.target.value)}
             error={errors.coverLetter}
             placeholder={t('apply.coverLetterPlaceholder')}
-            rows={8}
+            rows={16}
           />
           <span
             className={`${styles.charCount} ${

@@ -1,5 +1,28 @@
 {
   "appName": "Work&Study",
+  "about": {
+    "badge": "Work&Study",
+    "heroTitle": "Internship Platform\nPowered by AI",
+    "heroSub": "We help students in Kazakhstan find their first job faster, and companies find the best candidates effortlessly.",
+    "stat1Value": "500+", "stat1Label": "Students",
+    "stat2Value": "80+",  "stat2Label": "Companies",
+    "stat3Value": "300+", "stat3Label": "Internships",
+    "stat4Value": "3",    "stat4Label": "Languages",
+    "missionTitle": "Our Mission",
+    "missionText": "Bridge the gap between education and the job market in Kazakhstan. Students shouldn't spend months searching — AI does it in minutes, matching positions to their profile and ambitions.",
+    "featuresTitle": "What the platform can do",
+    "feature1Title": "AI Internship Matching",
+    "feature1Desc": "Gemini analyzes your profile — skills, major, experience — and finds internships with the highest match score.",
+    "feature2Title": "AI Cover Letter",
+    "feature2Desc": "One click — a personalized cover letter tailored to a specific vacancy based on your profile.",
+    "feature3Title": "Transparent Process",
+    "feature3Desc": "Track the status of every application in real time and receive Telegram notifications.",
+    "projectTitle": "About the Project",
+    "projectText1": "Work&Study is a graduation project by students of Astana IT University (AITU). The platform was built to solve a real problem: it's hard for Kazakhstani students to find their first internship, and for employers to quickly select the right candidates.",
+    "projectText2": "Under the hood: Node.js, React, PostgreSQL, Prisma, Google Gemini AI. The interface supports Russian, Kazakh, and English.",
+    "location": "Astana, Kazakhstan",
+    "version": "v0.1 · alpha"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "search": "Search",
@@ -12,6 +35,7 @@
     "faq": "FAQ",
     "support": "Support",
     "supportTickets": "Support Tickets",
+    "about": "About",
     "logout": "Log out",
     "login": "Log in",
     "register": "Sign up"

@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   HelpCircle,
   MessageSquare,
+  Info,
   X,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -42,6 +43,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { to: '/profile', label: t('nav.profile'), icon: User },
     { to: '/faq', label: t('nav.faq'), icon: HelpCircle },
     { to: '/support', label: t('nav.support'), icon: MessageSquare },
+    { to: '/about', label: t('nav.about'), icon: Info },
   ];
 
   const hrNav: NavItem[] = [
@@ -50,12 +52,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { to: '/profile', label: t('nav.profile'), icon: User },
     { to: '/faq', label: t('nav.faq'), icon: HelpCircle },
     { to: '/support', label: t('nav.support'), icon: MessageSquare },
+    { to: '/about', label: t('nav.about'), icon: Info },
   ];
 
   const adminNav: NavItem[] = [
     { to: '/admin/users', label: t('nav.users'), icon: Users },
     { to: '/admin/moderation', label: t('nav.moderation'), icon: ShieldCheck },
     { to: '/admin/support', label: t('nav.supportTickets'), icon: MessageSquare },
+    { to: '/about', label: t('nav.about'), icon: Info },
   ];
 
   const getNavItems = (): NavItem[] => {

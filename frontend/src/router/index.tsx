@@ -34,6 +34,7 @@ import FaqPage from '@/pages/support/FaqPage';
 import SupportPage from '@/pages/support/SupportPage';
 
 // Other
+import AboutPage from '@/pages/AboutPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { RoleBasedRedirect } from './RoleBasedRedirect';
 
@@ -59,6 +60,7 @@ export const router = createBrowserRouter([
           { path: '/profile', element: <ProfilePage /> },
           { path: '/faq', element: <FaqPage /> },
           { path: '/support', element: <SupportPage /> },
+          { path: '/about', element: <AboutPage /> },
 
           // Student routes
           {

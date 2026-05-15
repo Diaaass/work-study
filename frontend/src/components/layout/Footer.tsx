@@ -33,7 +33,7 @@ export function Footer() {
           <h4 className={styles.colTitle}>Платформа</h4>
           <Link to="/faq" className={styles.link}>FAQ</Link>
           <Link to="/support" className={styles.link}>Поддержка</Link>
-          <a href="#" className={styles.link}>О проекте</a>
+          <Link to="/about" className={styles.link}>О проекте</Link>
         </div>
 
         {showStudent && (

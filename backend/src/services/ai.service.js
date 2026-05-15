@@ -96,17 +96,17 @@ ${profile}
 Требования: ${internship.requirements?.join(', ')}
 Навыки: ${internship.skills?.join(', ')}
 
-Напиши профессиональное сопроводительное письмо на русском языке. Конкретные примеры из профиля, без воды и шаблонных фраз. Завершить призывом к интервью.
+Напиши короткое профессиональное сопроводительное письмо на русском языке от лица студента. Конкретные примеры из профиля, без воды и шаблонных фраз. Завершить призывом к интервью.
 
 Верни ТОЛЬКО текст письма.`;
 
   try {
     const result = await model.generateContent(prompt);
     const text = result.response.text().trim();
-    if (text.length <= 700) return text;
-    const truncated = text.slice(0, 700);
+    if (text.length <= 1800) return text;
+    const truncated = text.slice(0, 1800);
     const lastDot = truncated.lastIndexOf('.');
-    return lastDot > 300 ? truncated.slice(0, lastDot + 1) : truncated.trimEnd();
+    return lastDot > 500 ? truncated.slice(0, lastDot + 1) : truncated.trimEnd();
   } catch (err) {
     console.error('[AI] Ошибка cover letter:', err.message);
     throw new Error('Не удалось сгенерировать письмо');
