@@ -16,12 +16,11 @@ const create = async ({ subject, message }, userId) => {
     include: { user: { select: { id: true, name: true, email: true, role: true } } },
   });
 
-  // Email-уведомление администратору
-  const adminEmail = process.env.GMAIL_USER;
+  // Email-уведомление администратору (fire-and-forget)
+  const adminEmail = process.env.ADMIN_EMAIL;
   if (adminEmail) {
-    await sendSupportNotification(adminEmail, ticket).catch(err =>
-      console.error('[Support] Ошибка email-уведомления:', err.message)
-    );
+    sendSupportNotification(adminEmail, ticket)
+      .catch(err => console.error('[Support] Ошибка email-уведомления:', err.message));
   }
 
   // Уведомление всем администраторам в системе

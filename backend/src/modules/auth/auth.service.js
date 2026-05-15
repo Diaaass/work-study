@@ -68,11 +68,9 @@ const register = async ({ name, email, password, role, university, major, compan
     console.log(`\n📧 [Dev] Код верификации для ${email}: ${code}\n`);
   }
 
-  try {
-    await emailService.sendVerificationCode(email, user.name, code);
-  } catch (emailError) {
-    console.error('[Email] Ошибка отправки:', emailError.message);
-  }
+  // Отправляем письмо в фоне — не блокируем ответ сервера
+  emailService.sendVerificationCode(email, user.name, code)
+    .catch(err => console.error('[Email] Ошибка отправки:', err.message));
 
   return { email };
 };
@@ -124,11 +122,9 @@ const resendVerificationCode = async ({ email }) => {
   if (process.env.NODE_ENV !== 'production') {
     console.log(`\n📧 [Dev] Повторный код для ${email}: ${code}\n`);
   }
-  try {
-    await emailService.sendVerificationCode(email, user.name, code);
-  } catch (emailError) {
-    console.error('[Email] Ошибка отправки:', emailError.message);
-  }
+  emailService.sendVerificationCode(email, user.name, code)
+    .catch(err => console.error('[Email] Ошибка отправки:', err.message));
+
   return { message: 'Код отправлен повторно' };
 };
 

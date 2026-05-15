@@ -429,7 +429,7 @@ export default function ProfilePage() {
         </Card>
 
         {/* ── Skills ───────────────────────────────────────────────── */}
-        <Card className={styles.sectionCard}>
+        {!isHR && <Card className={styles.sectionCard}>
           <h2 className={styles.sectionTitle}>
             <span className={styles.sectionIcon}><Wrench size={18} /></span>
             {t('profile.skills')}
@@ -454,10 +454,10 @@ export default function ProfilePage() {
               placeholder={t('profile.addSkill')}
             />
           </div>
-        </Card>
+        </Card>}
 
         {/* ── Languages ────────────────────────────────────────────── */}
-        <Card className={styles.sectionCard}>
+        {!isHR && <Card className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>
               <span className={styles.sectionIcon}><Globe size={18} /></span>
@@ -491,7 +491,7 @@ export default function ProfilePage() {
               </div>
             )
           }
-        </Card>
+        </Card>}
 
         <div className={styles.actions}>
           <Button type="submit" loading={saving}>{t('profile.save')}</Button>
