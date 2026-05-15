@@ -1,0 +1,230 @@
+.card {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease;
+  overflow: hidden;
+  animation: fadeSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  outline: none;
+  will-change: transform;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-glow-purple);
+  border-color: var(--color-primary);
+}
+
+/* Apply button overlay */
+.applyOverlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 12px var(--spacing-lg);
+  background: linear-gradient(to top, var(--color-surface) 80%, transparent);
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .applyOverlay {
+  transform: translateY(0);
+}
+
+.applyBtn {
+  width: 100%;
+  padding: 8px 16px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.applyBtn:hover { opacity: 0.9; }
+
+/* Top badges */
+.topBadges {
+  position: absolute;
+  top: 12px; right: 12px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.hotBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--border-radius-full);
+  background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(249,115,22,0.2));
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.urgentBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--border-radius-full);
+  background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(239,68,68,0.2));
+  color: #fbbf24;
+  border: 1px solid rgba(245,158,11,0.3);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  padding-right: 80px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.headerInfo { min-width: 0; }
+
+.title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.company {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Meta */
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-md);
+}
+
+.workType {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: var(--border-radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.remote { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+.office { background: rgba(196,120,60,0.15); color: #c4784a; border: 1px solid rgba(196,120,60,0.25); }
+.hybrid { background: rgba(232,164,74,0.15); color: #e8a44a; border: 1px solid rgba(232,164,74,0.25); }
+
+.city {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.salary {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  margin-left: auto;
+}
+
+.salaryHigh {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Skills */
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: var(--spacing-md);
+}
+
+.moreSkills {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  padding: 2px 8px;
+  background: var(--color-border);
+  border-radius: var(--border-radius-full);
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.applicants {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+[data-theme="light"] .remote { background: rgba(16,185,129,0.1); color: #059669; }
+[data-theme="light"] .office { background: rgba(168,88,44,0.1);  color: #a8582c; }
+[data-theme="light"] .hybrid { background: rgba(196,122,36,0.1); color: #c47a24; }
+[data-theme="light"] .hotBadge { color: #dc2626; }
+[data-theme="light"] .urgentBadge { color: #d97706; }
+[data-theme="light"] .applyOverlay { background: linear-gradient(to top, var(--color-surface) 80%, transparent); }
+
+/* Touch devices: Apply button always visible (no hover) */
+@media (hover: none) {
+  .applyOverlay {
+    position: static;
+    transform: none;
+    padding: 0;
+    background: none;
+    margin-top: var(--spacing-md);
+  }
+}
