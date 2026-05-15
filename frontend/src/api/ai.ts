@@ -9,7 +9,4 @@ export const aiApi = {
 
   getCoverLetter: (internshipId: number): Promise<{ text: string }> =>
     apiClient<{ text: string }>('/ai/cover-letter', { method: 'POST', body: { internshipId } }),
-
-  smartSearch: (query: string, city?: string, workType?: string): Promise<Internship[]> =>
-    apiClient<Internship[]>('/ai/smart-search', { method: 'POST', body: { query, city, workType } }),
 };
