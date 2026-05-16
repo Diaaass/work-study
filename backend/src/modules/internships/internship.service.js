@@ -157,13 +157,16 @@ const update = async (id, data, userId) => {
     data: {
       title: data.title,
       company: data.company,
+      companyLogo: data.companyLogo !== undefined ? data.companyLogo : internship.companyLogo,
       description: data.description,
       requirements: data.requirements,
       skills: data.skills,
       city: data.city,
       workType: data.workType,
       salary: data.salary,
-      status: data.status
+      duration: data.duration,
+      deadline: data.deadline,
+      status: data.status,
     }
   });
 };
