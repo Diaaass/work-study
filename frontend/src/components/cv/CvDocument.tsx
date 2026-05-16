@@ -42,6 +42,9 @@ const s = StyleSheet.create({
 
   // ── Header ──────────────────────────────────────────────────────────────
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     marginBottom: 18,
     paddingBottom: 12,
     borderBottomWidth: 2,
@@ -53,18 +56,16 @@ const s = StyleSheet.create({
     fontSize: 24,
     letterSpacing: 0.3,
     color: TEXT,
-    marginBottom: 8,
   },
-  // Contact row: each item is just a Text with marginRight — avoids gap quirks
+  // Contact column on the right
   contactLine: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   },
   contactItem: {
     fontFamily: 'Roboto',
     fontSize: 9,
     color: MUTED,
-    marginRight: 4,
   },
   contactSep: {
     fontFamily: 'Roboto',
@@ -220,7 +221,10 @@ const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 function fmtDate(v: string): string {
   if (!v) return '';
   const [year, month] = v.split('-');
-  return `${MONTHS[parseInt(month, 10) - 1]} ${year}`.trim();
+  if (!month) return year;
+  const monthName = MONTHS[parseInt(month, 10) - 1];
+  if (!monthName) return year;
+  return `${monthName} ${year}`;
 }
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -255,10 +259,7 @@ export function CvDocument({ data }: { data: CvData }) {
           <View style={s.contactLine}>
             <Text style={s.contactItem}>{data.email}</Text>
             {data.phone && (
-              <>
-                <Text style={s.contactSep}>|</Text>
-                <Text style={s.contactItem}>{data.phone}</Text>
-              </>
+              <Text style={s.contactItem}>{data.phone}</Text>
             )}
           </View>
         </View>
