@@ -229,6 +229,15 @@ export default function MyInternshipsPage() {
                   >
                     {t('internships.viewApplicants')}
                   </Button>
+                  {internship.status !== InternshipStatus.Closed && (
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => navigate(`/hr/internships/${internship.id}/edit`)}
+                    >
+                      Редактировать
+                    </Button>
+                  )}
                   <Button
                     variant="ghost"
                     size="sm"

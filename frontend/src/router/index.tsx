@@ -22,6 +22,7 @@ import ProfilePage from '@/pages/student/ProfilePage';
 // HR pages
 import PostInternshipPage from '@/pages/hr/PostInternshipPage';
 import MyInternshipsPage from '@/pages/hr/MyInternshipsPage';
+import EditInternshipPage from '@/pages/hr/EditInternshipPage';
 import ApplicantsPage from '@/pages/hr/ApplicantsPage';
 
 // Admin pages
@@ -80,6 +81,7 @@ export const router = createBrowserRouter([
             children: [
               { path: '/hr/post', element: <PostInternshipPage /> },
               { path: '/hr/internships', element: <MyInternshipsPage /> },
+              { path: '/hr/internships/:id/edit', element: <EditInternshipPage /> },
               { path: '/hr/internships/:id/applicants', element: <ApplicantsPage /> },
             ],
           },
