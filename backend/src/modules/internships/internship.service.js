@@ -152,7 +152,7 @@ const update = async (id, data, userId) => {
   if (!internship) throw new Error('Стажировка не найдена');
   if (internship.postedById !== parseInt(userId)) throw new Error('Нет доступа');
 
-  return prisma.internship.update({
+  const updated = await prisma.internship.update({
     where: { id: parseInt(id) },
     data: {
       title: data.title,
@@ -166,9 +166,20 @@ const update = async (id, data, userId) => {
       salary: data.salary,
       duration: data.duration,
       deadline: data.deadline ? new Date(data.deadline) : internship.deadline,
-      status: data.status,
+      status: data.status ?? 'pending',
     }
   });
+
+  // Уведомить всех администраторов — стажировка обновлена, нужна повторная модерация
+  const admins = await prisma.user.findMany({ where: { role: 'admin' }, select: { id: true } });
+  await Promise.all(admins.map(a => notify(a.id, {
+    type: 'new_internship',
+    title: 'Стажировка обновлена — требует модерации',
+    body: `«${updated.title}» от компании ${updated.company}`,
+    link: '/admin/moderation',
+  })));
+
+  return updated;
 };
 
 const updateStatus = async (id, status, userId, userRole) => {
