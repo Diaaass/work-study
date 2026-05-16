@@ -235,7 +235,7 @@ export default function MyInternshipsPage() {
                       size="sm"
                       onClick={() => navigate(`/hr/internships/${internship.id}/edit`)}
                     >
-                      Редактировать
+                      {t('internships.edit')}
                     </Button>
                   )}
                   <Button
