@@ -165,7 +165,7 @@ const update = async (id, data, userId) => {
       workType: data.workType,
       salary: data.salary,
       duration: data.duration,
-      deadline: data.deadline,
+      deadline: data.deadline ? new Date(data.deadline) : internship.deadline,
       status: data.status,
     }
   });
