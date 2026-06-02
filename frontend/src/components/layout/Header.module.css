@@ -338,3 +338,17 @@
 @media (min-width: 768px) {
   .userName { display: block; }
 }
+
+@media (max-width: 540px) {
+  .inner { padding: 0 10px; }
+  .right { gap: 6px; }
+  .langBtn { padding: 3px 5px; font-size: 10px; }
+}
+
+@media (max-width: 420px) {
+  .logoText { display: none; }
+  .inner { padding: 0 8px; }
+  .right { gap: 4px; }
+  .langSwitcher { gap: 1px; padding: 2px; }
+  .langBtn { padding: 3px 4px; font-size: 10px; }
+}

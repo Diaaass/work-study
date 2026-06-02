@@ -89,3 +89,9 @@
     padding: var(--spacing-md);
   }
 }
+
+@media (max-width: 480px) {
+  .main {
+    padding: var(--spacing-sm) var(--spacing-sm);
+  }
+}

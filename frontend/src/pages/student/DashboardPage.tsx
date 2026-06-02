@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Clock, CheckCircle, LayoutList, Sparkles, ArrowRight, Zap } from 'lucide-react';
+import { Clock, CheckCircle, LayoutList, Sparkles, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { internshipsApi } from '@/api/internships';
 import { applicationsApi } from '@/api/applications';
@@ -10,6 +10,7 @@ import { Badge, getStatusVariant } from '@/components/ui/Badge/Badge';
 import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
 import { InternshipCard } from '@/components/ui/InternshipCard/InternshipCard';
 import { StatCard } from '@/components/ui/StatCard/StatCard';
+import { HeroSlideshow } from '@/components/ui/HeroSlideshow/HeroSlideshow';
 import type { Internship, Application } from '@/types/models';
 import { ApplicationStatus } from '@/types/enums';
 import { formatDateShort } from '@/utils/format';
@@ -90,34 +91,51 @@ export default function DashboardPage() {
     );
   }
 
-  const profileComplete = !!(user?.skills?.length && user?.major && user?.university);
+  const profileComplete = !!(user?.skills?.length && user?.major && user?.university && user?.phone);
 
   return (
     <div className={styles.page}>
-      {/* Hero */}
-      <div className={styles.hero}>
-        <div className={styles.heroContent}>
-          <div className={styles.heroBadge}>
-            <Zap size={12} />
-            <span>{t('dashboard.heroBadge')}</span>
-          </div>
-          <h1 className={styles.heroTitle}>
+      {/* Greeting */}
+      <div className={styles.greeting}>
+        <div>
+          <h1 className={styles.greetingTitle}>
             {t('dashboard.welcome', { name: user?.name?.split(' ')[0] })}
           </h1>
-          <p className={styles.heroSubtitle}>
-            {t('dashboard.heroSubtitle')}
-          </p>
           {!profileComplete && (
-            <button className={styles.heroCta} onClick={() => navigate('/profile')}>
-              <Sparkles size={14} />
-              {t('dashboard.heroCta')}
-              <ArrowRight size={14} />
-            </button>
+            <p className={styles.greetingHint}>
+              {t('dashboard.greetingHint')}
+            </p>
           )}
         </div>
-        <div className={styles.heroDecor} aria-hidden>
-          <div className={styles.heroOrb1} />
-          <div className={styles.heroOrb2} />
+        {!profileComplete && (
+          <button className={styles.greetingCta} onClick={() => navigate('/profile')}>
+            <Sparkles size={13} />
+            {t('dashboard.heroCta')}
+          </button>
+        )}
+      </div>
+
+      {/* Hero */}
+      <div className={styles.hero}>
+        <div className={styles.heroImage}>
+          <HeroSlideshow />
+        </div>
+        <div className={styles.heroContent}>
+          <p className={styles.heroQuestion}>{t('dashboard.heroQuestion')}</p>
+          <h1 className={styles.heroAnswer}>{t('dashboard.heroAnswer')}</h1>
+          <p className={styles.heroSubtitle}>{t('dashboard.heroSubtitle')}</p>
+          <div className={styles.heroActions}>
+            <button className={styles.heroCta} onClick={() => navigate('/search')}>
+              <Sparkles size={14} />
+              {t('dashboard.heroFindBtn')}
+              <ArrowRight size={14} />
+            </button>
+            {!profileComplete && (
+              <button className={styles.heroCtaGhost} onClick={() => navigate('/profile')}>
+                {t('dashboard.heroCta')}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

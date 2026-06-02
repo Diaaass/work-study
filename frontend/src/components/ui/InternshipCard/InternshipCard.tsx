@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Wifi, Building2, Shuffle, MapPin, Users } from 'lucide-react';
+import { Wifi, Building2, Shuffle, MapPin, Users, Bookmark } from 'lucide-react';
 import type { Internship } from '@/types/models';
 import { SkillBadge } from '../SkillBadge/SkillBadge';
 import { MatchScore } from '../MatchScore/MatchScore';
+import { useBookmarksContext } from '@/context/BookmarksContext';
+import { useAuth } from '@/hooks/useAuth';
 import styles from './InternshipCard.module.css';
 
 const COMPANY_COLORS = [
@@ -31,6 +33,8 @@ interface InternshipCardProps {
 export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
   const { t } = useTranslation('student');
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { isBookmarked, toggle } = useBookmarksContext();
 
   const color = getCompanyColor(internship.company);
   const workType = WORK_TYPE_CONFIG[internship.workType as keyof typeof WORK_TYPE_CONFIG]
@@ -58,6 +62,15 @@ export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
       <div className={styles.topBadges}>
         {isHot && <span className={styles.hotBadge}>Hot</span>}
         {deadlineSoon && <span className={styles.urgentBadge}>Срочно</span>}
+        {user?.role === 'student' && (
+          <button
+            className={`${styles.bookmarkBtn} ${isBookmarked(internship.id) ? styles.bookmarkActive : ''}`}
+            onClick={(e) => { e.stopPropagation(); toggle(internship.id); }}
+            aria-label="Bookmark"
+          >
+            <Bookmark size={14} />
+          </button>
+        )}
       </div>
 
       {/* Header */}

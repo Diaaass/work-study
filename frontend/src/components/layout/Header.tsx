@@ -21,7 +21,6 @@ const ROLE_LABELS: Record<string, string> = {
 type CtaConfig = { label: string; to: string; Icon: typeof Search };
 
 const CTA_BY_ROLE: Record<string, CtaConfig> = {
-  student: { label: 'Найти стажировку', to: '/search', Icon: Search },
   hr: { label: 'Опубликовать', to: '/hr/post', Icon: PlusCircle },
   admin: { label: 'Модерация', to: '/admin/moderation', Icon: ShieldCheck },
 };

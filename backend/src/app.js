@@ -12,6 +12,7 @@ const uploadRoutes  = require('./modules/upload/upload.routes');
 const supportRoutes       = require('./modules/support/support.routes');
 const notificationRoutes  = require('./modules/notifications/notification.routes');
 const aiRoutes            = require('./modules/ai/ai.routes');
+const bookmarkRoutes      = require('./modules/bookmarks/bookmark.routes');
 
 const app = express();
 
@@ -33,5 +34,6 @@ app.use('/api/v1/upload',  uploadRoutes);
 app.use('/api/v1/support',        supportRoutes);
 app.use('/api/v1/notifications',  notificationRoutes);
 app.use('/api/v1/ai',             aiRoutes);
+app.use('/api/v1/bookmarks',      bookmarkRoutes);
 
 module.exports = app;

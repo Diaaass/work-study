@@ -87,6 +87,34 @@
   border: 1px solid rgba(245,158,11,0.3);
 }
 
+.bookmarkBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s, background 0.2s, border-color 0.2s, transform 0.15s;
+}
+.bookmarkBtn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: scale(1.1);
+}
+.bookmarkActive {
+  color: var(--color-primary) !important;
+  background: var(--color-primary-light) !important;
+  border-color: var(--color-primary) !important;
+}
+.bookmarkActive svg {
+  fill: var(--color-primary);
+}
+
 /* Header */
 .header {
   display: flex;
@@ -227,4 +255,9 @@
     background: none;
     margin-top: var(--spacing-md);
   }
+}
+
+@media (max-width: 480px) {
+  .card { padding: var(--spacing-md); }
+  .title { font-size: var(--font-size-sm); }
 }

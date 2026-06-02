@@ -71,6 +71,7 @@ model User {
   applications   Application[]
   tickets        SupportTicket[]
   notifications  Notification[]
+  bookmarks      Bookmark[]
 }
 
 model Notification {
@@ -123,6 +124,19 @@ model Internship {
 
   postedBy     User          @relation(fields: [postedById], references: [id])
   applications Application[]
+  bookmarks    Bookmark[]
+}
+
+model Bookmark {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  internshipId Int
+  createdAt    DateTime @default(now())
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  internship Internship @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, internshipId])
 }
 
 model VerificationCode {

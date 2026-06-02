@@ -650,3 +650,10 @@
     font-size: 22px;
   }
 }
+
+@media (max-width: 480px) {
+  .fieldGrid { grid-template-columns: 1fr; }
+  .profileCard { padding: var(--spacing-md); }
+  .section { padding: var(--spacing-md); }
+  .sectionTitle { font-size: var(--font-size-base); }
+}

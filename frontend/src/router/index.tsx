@@ -17,6 +17,7 @@ import SearchPage from '@/pages/student/SearchPage';
 import InternshipDetailPage from '@/pages/student/InternshipDetailPage';
 import ApplicationFormPage from '@/pages/student/ApplicationFormPage';
 import MyApplicationsPage from '@/pages/student/MyApplicationsPage';
+import SavedPage from '@/pages/student/SavedPage';
 import ProfilePage from '@/pages/student/ProfilePage';
 
 // HR pages
@@ -72,6 +73,7 @@ export const router = createBrowserRouter([
               { path: '/internships/:id', element: <InternshipDetailPage /> },
               { path: '/internships/:id/apply', element: <ApplicationFormPage /> },
               { path: '/my-applications', element: <MyApplicationsPage /> },
+              { path: '/saved', element: <SavedPage /> },
             ],
           },
 

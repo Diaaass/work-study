@@ -2,8 +2,12 @@
   "dashboard": {
     "welcome": "Welcome, {{name}}!",
     "heroBadge": "Work&Study",
-    "heroSubtitle": "Smart internship platform with personalized AI matching",
-    "heroCta": "Complete your profile for AI recommendations",
+    "greetingHint": "Complete your profile so AI can find the best internships for you",
+    "heroQuestion": "Not sure where to find an internship?",
+    "heroAnswer": "We'll help you.",
+    "heroSubtitle": "Work&Study uses AI to match the best internships to your profile — tailored to the Kazakhstani job market.",
+    "heroFindBtn": "Find Internship",
+    "heroCta": "Complete profile",
     "recommendations": "AI Recommendations",
     "recommendationsDesc": "Internships matched to your profile",
     "recentApplications": "Recent Applications",
@@ -178,5 +182,10 @@
     "accepted": "Accepted",
     "rejected": "Rejected",
     "reviewed": "Reviewed"
+  },
+  "saved": {
+    "title": "Saved Internships",
+    "empty": "No saved internships yet",
+    "emptyHint": "Click the bookmark icon on an internship card to save it here"
   }
 }
