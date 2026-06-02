@@ -64,8 +64,8 @@ export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
         {deadlineSoon && <span className={styles.urgentBadge}>Срочно</span>}
         {user?.role === 'student' && (
           <button
-            className={`${styles.bookmarkBtn} ${isBookmarked(internship.id) ? styles.bookmarkActive : ''}`}
-            onClick={(e) => { e.stopPropagation(); toggle(internship.id); }}
+            className={`${styles.bookmarkBtn} ${isBookmarked(Number(internship.id)) ? styles.bookmarkActive : ''}`}
+            onClick={(e) => { e.stopPropagation(); toggle(Number(internship.id)); }}
             aria-label="Bookmark"
           >
             <Bookmark size={14} />
